@@ -7,4 +7,15 @@
     <string name="hint_name">Nombre completo</string>
     <string name="logo">Logo de la aplicación</string>
     <string name="avatar">Avatar del usuario</string>
+
+    <string name="comprobante_selection_title">Seleccionar Tipo de Comprobante</string>
+    <string name="comprobante_boleta">Boleta</string>
+    <string name="comprobante_factura">Factura</string>
+    <string name="hint_razon_social">Razón Social</string>
+    <string name="hint_ruc">RUC</string>
+    <string name="hint_direccion_fiscal">Dirección Fiscal</string>
+    <string name="btn_continuar">Continuar</string>
+    <string name="btn_compartir">Compartir</string>
+    <string name="btn_finalizar">Finalizar</string>
+
 </resources>

@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
 
+
         <!-- Register Activity -->
         <activity
             android:name=".presentation.register.RegisterActivity"
@@ -54,5 +55,12 @@
             android:name=".presentation.chekout.CheckoutActivity"
             android:parentActivityName=".presentation.cart.CartActivity"
             android:exported="false" />
+
+        <!-- Comprobante Activity -->
+        <activity
+            android:name=".presentation.comprobante.ComprobanteActivity"
+            android:parentActivityName=".presentation.chekout.CheckoutActivity"
+            android:exported="false" />
+
     </application>
 </manifest>
