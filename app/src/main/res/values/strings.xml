@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">E-Commerce EF</string>
+    <string name="btn_login">Iniciar Sesión</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Contraseña</string>
+    <string name="hint_name">Nombre completo</string>
+    <string name="logo">Logo de la aplicación</string>
+    <string name="avatar">Avatar del usuario</string>
+</resources>

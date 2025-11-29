@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+!src/**/build/
+
+# Android Studio
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Local configuration
+local.properties
+*.orig
+*.log
+
+# Build outputs
+app/build/
+*.apk
+*.aab
+*.aar
+
+# Firebase (opcional)
+# app/google-services.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+captures/
+
+# Keystores
+*.jks
+*.keystore
+
+# Kotlin
+.kotlin/
