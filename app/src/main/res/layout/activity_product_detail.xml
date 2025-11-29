@@ -7,13 +7,13 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
+    <!-- Toolbar Simple -->
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarDetail"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        app:titleTextColor="@android:color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,14 +21,15 @@
 
             <ImageButton
                 android:id="@+id/btnBackDetail"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Volver"
-                android:padding="16dp"
-                android:src="@mipmap/ic_launcher_foreground" />
+                android:padding="12dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@android:color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,7 +42,7 @@
 
         </RelativeLayout>
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -54,22 +55,20 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Imagen del producto -->
             <ImageView
                 android:id="@+id/ivProductDetail"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
+                android:scaleType="centerInside"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Información del producto -->
             <TextView
                 android:id="@+id/tvProductTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Product Title"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginBottom="8dp" />
@@ -80,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:text="S/. 0.00"
                 android:textSize="28sp"
-                android:textColor="@color/design_default_color_primary"
+                android:textColor="@color/colorPrimary"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />
@@ -104,7 +103,6 @@
                 android:gravity="center"
                 android:layout_marginBottom="24dp" />
 
-            <!-- Descripción -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -126,14 +124,13 @@
 
     </ScrollView>
 
-    <!-- Botón de acción -->
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAddToCartDetail"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="56dp"
         android:text="Agregar al Carrito"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/design_default_color_primary" />
+        app:cornerRadius="8dp" />
 
 </LinearLayout>
