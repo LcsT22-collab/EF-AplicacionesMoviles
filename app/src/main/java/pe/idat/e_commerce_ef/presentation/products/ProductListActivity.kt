@@ -2,12 +2,16 @@ package pe.idat.e_commerce_ef.presentation.products
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import pe.idat.e_commerce_ef.databinding.ActivityProductListBinding
 import pe.idat.e_commerce_ef.presentation.adapter.ProductAdapter
 import pe.idat.e_commerce_ef.presentation.cart.CartActivity
@@ -33,7 +37,11 @@ class ProductListActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         productAdapter = ProductAdapter(emptyList()) { product, quantity ->
             viewModel.addToCart(product, quantity)
-            Toast.makeText(this, "✅ ${product.name} (x$quantity) agregado al carrito", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "✅ ${product.name} (x$quantity) agregado al carrito",
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.recyclerViewProducts.apply {
@@ -48,9 +56,11 @@ class ProductListActivity : AppCompatActivity() {
                 is ProductsState.Loading -> {
                     // Mostrar loading si es necesario
                 }
+
                 is ProductsState.Success -> {
                     productAdapter.updateProducts(state.products)
                 }
+
                 is ProductsState.Error -> {
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                 }
@@ -86,6 +96,16 @@ class ProductListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.updateCartCount()
+        viewModel.loadProducts()
+
+        // Forzar guardado en Room (temporal)
+        lifecycleScope.launch {
+            delay(2000) // Esperar 2 segundos
+            Log.d("DB_DEBUG", "Forzando carga de datos...")
+
+            // Obtener datos de API y guardar en Room
+            viewModel.loadProducts()
+        }
     }
+
 }

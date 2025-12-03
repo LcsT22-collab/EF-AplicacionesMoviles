@@ -3,6 +3,7 @@ package pe.idat.e_commerce_ef.data.repository
 import pe.idat.e_commerce_ef.data.local.AppDatabase
 import pe.idat.e_commerce_ef.data.mapper.ProductMapper
 import pe.idat.e_commerce_ef.data.remote.RetrofitClient
+import pe.idat.e_commerce_ef.data.remote.api.ProductsResponse
 import pe.idat.e_commerce_ef.domain.model.Product
 import pe.idat.e_commerce_ef.domain.repository.ProductRepository
 import javax.inject.Inject
@@ -15,19 +16,26 @@ class ProductRepositoryImpl @Inject constructor(
 
     override suspend fun getProducts(): Result<List<Product>> {
         return try {
-            // Primero intentar obtener de la API
+            println("🔄 Intentando obtener productos de API propia...")
+
             val response = apiService.getProducts()
             if (response.isSuccessful) {
-                val apiProducts = response.body() ?: emptyList()
+                println("✅ API propia exitosa")
+                val apiResponse: ProductsResponse? = response.body()
+                val apiProducts = apiResponse?.products ?: emptyList()
                 val products = apiProducts.map { ProductMapper.apiToDomain(it) }
 
                 // Guardar en base de datos local
                 saveProductsToLocal(products)
+                println("💾 Productos guardados en Room: ${products.size} items")
 
                 Result.success(products)
             } else {
+                println("⚠️ API falló, código: ${response.code()}")
                 // Si falla la API, obtener de la base de datos local
                 val localProducts = getProductsFromLocal()
+                println("📁 Productos desde Room: ${localProducts.size} items")
+
                 if (localProducts.isNotEmpty()) {
                     Result.success(localProducts)
                 } else {
@@ -35,8 +43,10 @@ class ProductRepositoryImpl @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            // En caso de error, intentar obtener de la base de datos local
+            println("❌ Error en API: ${e.message}")
             val localProducts = getProductsFromLocal()
+            println("📁 Productos desde Room (catch): ${localProducts.size} items")
+
             if (localProducts.isNotEmpty()) {
                 Result.success(localProducts)
             } else {

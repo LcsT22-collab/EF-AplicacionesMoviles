@@ -9,12 +9,12 @@ object ProductMapper {
     fun apiToDomain(dto: ProductDto): Product {
         return Product(
             id = dto.id,
-            name = dto.title,
+            name = dto.name,
             price = dto.price,
             description = dto.description,
             category = dto.category,
             image = dto.image,
-            stock = (10..50).random() // FakeStore no tiene stock, lo simulamos
+            stock = dto.stock
         )
     }
 
