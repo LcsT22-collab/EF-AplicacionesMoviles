@@ -1,97 +1,63 @@
 package pe.idat.e_commerce_ef.presentation.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import pe.idat.e_commerce_ef.R
+import coil.load
 import pe.idat.e_commerce_ef.databinding.ItemProductBinding
 import pe.idat.e_commerce_ef.domain.model.Product
-import pe.idat.e_commerce_ef.presentation.products.ProductDetailActivity
 
 class ProductAdapter(
-    private var products: List<Product> = emptyList(),
     private val onAddToCart: (Product, Int) -> Unit
-) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+) : ListAdapter<Product, ProductAdapter.ViewHolder>(ProductDiffCallback()) {
 
-    inner class ProductViewHolder(private val binding: ItemProductBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        private var currentProduct: Product? = null
-        private var currentQuantity: Int = 1
+    class ViewHolder(
+        private val binding: ItemProductBinding,
+        private val onAddToCart: (Product, Int) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
-            currentProduct = product
-            currentQuantity = 1
-
-            binding.tvTitle.text = product.name
-            binding.tvPrice.text = "S/. ${String.format("%.2f", product.price)}"
+            binding.tvName.text = product.name
+            binding.tvPrice.text = "S/. ${product.price}"
             binding.tvCategory.text = product.category
-            binding.tvStock.text = "Stock: ${product.stock}"
 
-            updateQuantityDisplay()
-
-            Glide.with(itemView.context)
-                .load(product.image)
-                .placeholder(R.drawable.ic_launcher_foreground) // ← AHORA FUNCIONARÁ
-                .error(R.drawable.ic_launcher_foreground)
-                .into(binding.ivProduct)
-
-            binding.btnDecrease.setOnClickListener {
-                if (currentQuantity > 1) {
-                    currentQuantity--
-                    updateQuantityDisplay()
-                }
-            }
-
-            binding.btnIncrease.setOnClickListener {
-                if (currentQuantity < product.stock) {
-                    currentQuantity++
-                    updateQuantityDisplay()
-                }
-            }
-
-            itemView.setOnClickListener {
-                val intent = Intent(itemView.context, ProductDetailActivity::class.java).apply {
-                    putExtra("product", product)
-                }
-                itemView.context.startActivity(intent)
+            // CAMBIAR: Usar Coil en lugar de Glide
+            binding.ivProduct.load(product.image) {
+                crossfade(true)
             }
 
             binding.btnAddToCart.setOnClickListener {
-                currentProduct?.let { product ->
-                    onAddToCart(product, currentQuantity)
-                    currentQuantity = 1
-                    updateQuantityDisplay()
-                }
+                onAddToCart(product, 1)
             }
-        }
 
-        private fun updateQuantityDisplay() {
-            binding.tvQuantity.text = currentQuantity.toString()
-            binding.btnDecrease.isEnabled = currentQuantity > 1
-            binding.btnIncrease.isEnabled = currentQuantity < (currentProduct?.stock ?: 1)
+            itemView.setOnClickListener {
+                // Abrir detalle del producto
+            }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemProductBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return ProductViewHolder(binding)
+        return ViewHolder(binding, onAddToCart)
     }
 
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.bind(products[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+}
+
+class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
+    override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+        return oldItem.id == newItem.id
     }
 
-    override fun getItemCount(): Int = products.size
-
-    fun updateProducts(newProducts: List<Product>) {
-        products = newProducts
-        notifyDataSetChanged()
+    override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+        return oldItem == newItem
     }
 }

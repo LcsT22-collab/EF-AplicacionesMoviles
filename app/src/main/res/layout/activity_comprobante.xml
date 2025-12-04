@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#f5f5f5">
+    android:background="@android:color/white">
 
     <!-- Toolbar -->
-    <com.google.android.material.appbar.MaterialToolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarComprobante"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/toolbar_gradient"
-        android:theme="@style/ThemeOverlay.Material3.Dark">
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,8 +29,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Volver"
                 android:padding="12dp"
-                android:src="@drawable/ic_arrow_back"
-                app:tint="?attr/colorOnPrimary" />
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@android:color/white" />
 
             <TextView
                 android:id="@+id/tvTituloComprobante"
@@ -37,13 +38,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="Comprobante"
-                android:textColor="?attr/colorOnPrimary"
+                android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
-
         </RelativeLayout>
-
-    </com.google.android.material.appbar.MaterialToolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -51,271 +50,165 @@
         android:layout_weight="1"
         android:padding="16dp">
 
-        <com.google.android.material.card.MaterialCardView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            android:layout_margin="8dp">
+            android:orientation="vertical"
+            android:background="@android:color/white">
+
+            <!-- Información del comprobante -->
+            <TextView
+                android:id="@+id/tvTipoComprobante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="COMPROBANTE"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvNumeroComprobante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Número: 000000"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fecha: 01/01/2024"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Información del cliente (solo para factura) -->
+            <LinearLayout
+                android:id="@+id/layoutInfoCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:padding="16dp"
+                android:background="#F5F5F5"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tvRazonSocial"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Razón Social: "
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvRuc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="RUC: "
+                    android:textSize="14sp"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvDireccionFiscal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dirección: "
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Lista de productos -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Productos:"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutProductos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Totales -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                android:layout_marginVertical="8dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp">
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp">
 
-                <!-- Encabezado del comprobante -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="20dp">
-
-                    <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:src="@drawable/ic_launcher_foreground"
-                        android:layout_marginEnd="12dp" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tvTipoComprobante"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="BOLETA DE VENTA"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#2E7D32" />
-
-                        <TextView
-                            android:id="@+id/tvNumeroComprobante"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="B001-00000001"
-                            android:textSize="14sp"
-                            android:textColor="#666" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tvFecha"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="01/01/2024"
-                        android:textSize="12sp"
-                        android:textColor="#666" />
-
-                </LinearLayout>
-
-                <!-- Información del cliente -->
-                <LinearLayout
-                    android:id="@+id/layoutInfoCliente"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="#f8f9fa"
-                    android:padding="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="INFORMACIÓN DEL CLIENTE"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#333"
-                        android:layout_marginBottom="8dp" />
-
-                    <TextView
-                        android:id="@+id/tvRazonSocial"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Razón Social:"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvRuc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="RUC:"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvDireccionFiscal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Dirección:"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <!-- Detalles de los productos -->
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="DETALLES DE LA COMPRA"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#333"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_weight="1"
+                    android:text="Subtotal:"
+                    android:textSize="14sp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp"
-                    android:paddingBottom="8dp"
-                    android:background="@drawable/divider">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:text="Producto"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="#666" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Cant."
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="#666"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="P.Unit"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="#666"
-                        android:gravity="center" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Total"
-                        android:textSize="12sp"
-                        android:textStyle="bold"
-                        android:textColor="#666"
-                        android:gravity="end" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layoutProductos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="16dp" />
-
-                <!-- Totales -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#e0e0e0"
-                    android:layout_marginBottom="12dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="4dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Subtotal:"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/tvSubtotal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="S/. 0.00"
-                        android:textSize="14sp"
-                        android:gravity="end" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="4dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="IGV (18%):"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/tvIgv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="S/. 0.00"
-                        android:textSize="14sp"
-                        android:gravity="end" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="TOTAL:"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvTotalComprobante"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="S/. 0.00"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#2E7D32"
-                        android:gravity="end" />
-
-                </LinearLayout>
-
-                <!-- Mensaje de agradecimiento -->
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/tvSubtotal"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="¡Gracias por su compra!"
-                    android:textSize="14sp"
-                    android:textStyle="italic"
-                    android:gravity="center"
-                    android:textColor="#666"
-                    android:layout_marginTop="8dp" />
-
+                    android:text="S/. 0.00"
+                    android:textSize="14sp" />
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="4dp">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="IGV (18%):"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvIgv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/. 0.00"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TOTAL:"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTotalComprobante"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S/. 0.00"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
     <!-- Botones de acción -->
@@ -326,19 +219,16 @@
         android:padding="16dp"
         android:background="@android:color/white">
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/btnCompartir"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             android:text="Compartir"
-            android:textSize="14sp"
-            app:icon="@drawable/ic_share"
-            app:iconGravity="textStart"
-            style="@style/Widget.Material3.Button.OutlinedButton" />
+            android:textSize="14sp" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/btnFinalizar"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -346,9 +236,7 @@
             android:layout_marginStart="8dp"
             android:text="Finalizar"
             android:textSize="14sp"
-            app:icon="@drawable/ic_done"
-            app:iconGravity="textStart" />
-
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white" />
     </LinearLayout>
-
 </LinearLayout>

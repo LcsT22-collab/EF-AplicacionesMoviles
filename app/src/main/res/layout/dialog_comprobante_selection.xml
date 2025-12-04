@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radioBoleta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,17 +28,16 @@
             android:textSize="16sp"
             android:checked="true" />
 
-        <com.google.android.material.radiobutton.MaterialRadioButton
+        <RadioButton
             android:id="@+id/radioFactura"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Factura"
             android:textSize="16sp"
             android:layout_marginTop="12dp" />
-
     </RadioGroup>
 
-    <!-- Campos para factura (inicialmente ocultos) -->
+    <!-- Campos para factura -->
     <LinearLayout
         android:id="@+id/layoutFactura"
         android:layout_width="match_parent"
@@ -47,51 +46,34 @@
         android:visibility="gone"
         android:layout_marginTop="16dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <EditText
+            android:id="@+id/etRazonSocial"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_height="56dp"
+            android:hint="Razón Social"
+            android:inputType="textCapWords"
+            android:padding="16dp"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginBottom="12dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRazonSocial"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Razón Social"
-                android:inputType="textCapWords" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <EditText
+            android:id="@+id/etRuc"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp">
+            android:layout_height="56dp"
+            android:hint="RUC"
+            android:inputType="number"
+            android:maxLength="11"
+            android:padding="16dp"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginBottom="12dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etRuc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="RUC"
-                android:inputType="number"
-                android:maxLength="11" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        <EditText
+            android:id="@+id/etDireccionFiscal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDireccionFiscal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Dirección Fiscal"
-                android:inputType="textCapWords" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
+            android:layout_height="56dp"
+            android:hint="Dirección Fiscal"
+            android:inputType="textCapWords"
+            android:padding="16dp"
+            android:background="@drawable/edit_text_background" />
     </LinearLayout>
-
 </LinearLayout>

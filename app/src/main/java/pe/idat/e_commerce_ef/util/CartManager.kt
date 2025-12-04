@@ -1,41 +1,30 @@
+// CartManager.kt
 package pe.idat.e_commerce_ef.util
 
 import pe.idat.e_commerce_ef.domain.model.Product
 
 object CartManager {
-    private val _cartItems = mutableListOf<Product>()
-    val cartItems: List<Product> get() = _cartItems
+    private val cart = mutableListOf<Product>()
+
+    val items: List<Product> get() = cart
+    val total: Double get() = cart.sumOf { it.price * it.quantity }
+    val itemCount: Int get() = cart.sumOf { it.quantity }
 
     fun addToCart(product: Product, quantity: Int = 1) {
-        val existingProductIndex = _cartItems.indexOfFirst { it.id == product.id }
-
-        if (existingProductIndex != -1) {
-            val existingProduct = _cartItems[existingProductIndex]
-            existingProduct.setQuantity(existingProduct.selectedQuantity + quantity)
+        val existing = cart.find { it.id == product.id }
+        if (existing != null) {
+            existing.setQuantity(existing.quantity + quantity)
         } else {
-            val productCopy = product.copy().apply {
+            val newItem = product.copy().apply {
                 setQuantity(quantity)
             }
-            _cartItems.add(productCopy)
+            cart.add(newItem)
         }
     }
 
-    fun updateQuantity(product: Product, newQuantity: Int) {
-        val existingProduct = _cartItems.find { it.id == product.id }
-        existingProduct?.setQuantity(newQuantity)
-    }
-
     fun removeFromCart(product: Product) {
-        _cartItems.removeAll { it.id == product.id }
+        cart.removeAll { it.id == product.id }
     }
 
-    fun clearCart() {
-        _cartItems.clear()
-    }
-
-    fun getTotal(): Double = _cartItems.sumOf { it.getTotalPrice() }
-
-    fun getItemCount(): Int = _cartItems.sumOf { it.selectedQuantity }
-
-    fun getUniqueItemCount(): Int = _cartItems.size
+    fun clearCart() = cart.clear()
 }

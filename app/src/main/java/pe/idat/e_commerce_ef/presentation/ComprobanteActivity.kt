@@ -1,4 +1,4 @@
-package pe.idat.e_commerce_ef.presentation.comprobante
+package pe.idat.e_commerce_ef.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import pe.idat.e_commerce_ef.databinding.ActivityComprobanteBinding
-import pe.idat.e_commerce_ef.domain.model.Product
-import pe.idat.e_commerce_ef.presentation.products.ProductListActivity
 import pe.idat.e_commerce_ef.util.CartManager
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -87,7 +85,7 @@ class ComprobanteActivity : AppCompatActivity() {
         val layoutProductos = binding.layoutProductos
         layoutProductos.removeAllViews()
 
-        CartManager.cartItems.forEach { product ->
+        CartManager.items.forEach { product ->
             val productoView = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
                 layoutParams = LinearLayout.LayoutParams(
@@ -110,7 +108,7 @@ class ComprobanteActivity : AppCompatActivity() {
             // Cantidad
             val tvCantidad = TextView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                text = product.selectedQuantity.toString()
+                text = product.quantity.toString() // CORREGIDO: quantity en lugar de selectedQuantity
                 textSize = 12f
                 setTextColor(ContextCompat.getColor(this@ComprobanteActivity, android.R.color.black))
                 gravity = android.view.Gravity.CENTER
@@ -128,7 +126,7 @@ class ComprobanteActivity : AppCompatActivity() {
             // Total
             val tvTotal = TextView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-                text = "S/. ${String.format("%.2f", product.getTotalPrice())}"
+                text = "S/. ${String.format("%.2f", product.totalPrice())}" // CORREGIDO: totalPrice()
                 textSize = 12f
                 setTextColor(ContextCompat.getColor(this@ComprobanteActivity, android.R.color.black))
                 gravity = android.view.Gravity.END
@@ -144,7 +142,7 @@ class ComprobanteActivity : AppCompatActivity() {
     }
 
     private fun calcularTotales() {
-        val subtotal = CartManager.getTotal()
+        val subtotal = CartManager.total
         val igv = subtotal * 0.18
         val total = subtotal + igv
 
@@ -164,6 +162,7 @@ class ComprobanteActivity : AppCompatActivity() {
     }
 
     private fun compartirComprobante() {
+        // CORREGIR: Intent mal escrito
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
             type = "text/plain"
@@ -186,8 +185,9 @@ class ComprobanteActivity : AppCompatActivity() {
         }
 
         builder.append("DETALLES DE LA COMPRA:\n")
-        CartManager.cartItems.forEach { product ->
-            builder.append("• ${product.name} x${product.selectedQuantity} - S/. ${String.format("%.2f", product.getTotalPrice())}\n")
+        CartManager.items.forEach { product ->
+            // CORREGIDO: quantity y totalPrice()
+            builder.append("• ${product.name} x${product.quantity} - S/. ${String.format("%.2f", product.totalPrice())}\n")
         }
 
         builder.append("\n")

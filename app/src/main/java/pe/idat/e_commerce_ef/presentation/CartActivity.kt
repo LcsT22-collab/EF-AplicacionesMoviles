@@ -1,22 +1,21 @@
-package pe.idat.e_commerce_ef.presentation.cart
+package pe.idat.e_commerce_ef.presentation
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.activity.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityCartBinding
 import pe.idat.e_commerce_ef.presentation.adapter.CartAdapter
-import pe.idat.e_commerce_ef.presentation.chekout.CheckoutActivity
+import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
+import pe.idat.e_commerce_ef.util.CartManager
 
-@AndroidEntryPoint
 class CartActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCartBinding
-    private val viewModel: CartViewModel by viewModels()
+    private lateinit var viewModel: AppViewModel
     private lateinit var cartAdapter: CartAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,12 +23,17 @@ class CartActivity : AppCompatActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // CORREGIR: Usar ViewModelProvider con Factory
+        val repository = AppRepository(applicationContext)
+        val factory = AppViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
+
         setupViews()
         setupObservers()
     }
-
     private fun setupViews() {
         cartAdapter = CartAdapter(emptyList()) { product ->
+            // CORREGIR: Usar viewModel.removeFromCart
             viewModel.removeFromCart(product)
             Toast.makeText(this, "❌ ${product.name} removido", Toast.LENGTH_SHORT).show()
         }
@@ -49,11 +53,12 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        viewModel.cartState.observe(this, Observer { state ->
-            cartAdapter.updateCartItems(state.items)
-            updateTotal(state.total)
-            updateEmptyState(state.isEmpty)
-        })
+        // CORREGIR: Observar cartItems del AppViewModel
+        viewModel.cartItems.observe(this) { items ->
+            cartAdapter.updateCartItems(items)
+            updateTotal(CartManager.total)
+            updateEmptyState(items.isEmpty())
+        }
     }
 
     private fun updateTotal(total: Double) {
@@ -75,7 +80,7 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun checkout() {
-        if (viewModel.cartState.value?.isEmpty == false) {
+        if (CartManager.items.isNotEmpty()) {
             val intent = Intent(this, CheckoutActivity::class.java)
             startActivity(intent)
         } else {
@@ -85,7 +90,8 @@ class CartActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadCartItems()
+        // Actualizar carrito cuando vuelve a la actividad
+        viewModel.updateCart()
     }
 
     override fun onBackPressed() {

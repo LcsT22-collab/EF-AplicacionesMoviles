@@ -1,15 +1,12 @@
-package pe.idat.e_commerce_ef.presentation.chekout
+package pe.idat.e_commerce_ef.presentation
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import pe.idat.e_commerce_ef.databinding.ActivityCheckoutBinding
 import pe.idat.e_commerce_ef.databinding.DialogComprobanteSelectionBinding
-import pe.idat.e_commerce_ef.presentation.comprobante.ComprobanteActivity
-import pe.idat.e_commerce_ef.presentation.products.ProductListActivity
 import pe.idat.e_commerce_ef.util.CartManager
 
 class CheckoutActivity : AppCompatActivity() {
@@ -73,12 +70,11 @@ class CheckoutActivity : AppCompatActivity() {
             }
             .create()
 
-        // Mostrar/ocultar campos de factura según selección
         dialogBinding.radioGroupComprobante.setOnCheckedChangeListener { group, checkedId ->
-            if (checkedId == dialogBinding.radioFactura.id) {
-                dialogBinding.layoutFactura.visibility = android.view.View.VISIBLE
+            dialogBinding.layoutFactura.visibility = if (checkedId == dialogBinding.radioFactura.id) {
+                android.view.View.VISIBLE
             } else {
-                dialogBinding.layoutFactura.visibility = android.view.View.GONE
+                android.view.View.GONE
             }
         }
 
@@ -96,16 +92,16 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun loadOrderSummary() {
-        val total = CartManager.getTotal()
-        val itemCount = CartManager.getItemCount()
+        val total = CartManager.total
+        val itemCount = CartManager.itemCount
 
         binding.tvCheckoutTotal.text = "Total: S/. ${String.format("%.2f", total)}"
         binding.tvItemCount.text = "Items: $itemCount"
 
         val summary = StringBuilder()
-        CartManager.cartItems.forEach { product ->
-            val productTotal = product.price * product.selectedQuantity
-            summary.append("• ${product.name} - S/. ${String.format("%.2f", product.price)} x${product.selectedQuantity} = S/. ${String.format("%.2f", productTotal)}\n")
+        CartManager.items.forEach { product ->
+            val productTotal = product.price * product.quantity // CORREGIDO: quantity
+            summary.append("• ${product.name} - S/. ${String.format("%.2f", product.price)} x${product.quantity} = S/. ${String.format("%.2f", productTotal)}\n")
         }
         binding.tvOrderSummary.text = summary.toString()
     }

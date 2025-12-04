@@ -10,15 +10,13 @@ data class Product(
     val category: String,
     val image: String,
     val stock: Int
-) : Serializable {
-    var selectedQuantity: Int = 1
+) {
+    var quantity: Int = 1
         private set
 
-    fun setQuantity(quantity: Int) {
-        selectedQuantity = quantity.coerceAtLeast(1).coerceAtMost(stock)
+    fun setQuantity(qty: Int) {
+        quantity = qty.coerceAtLeast(1).coerceAtMost(stock)
     }
 
-    fun getTotalPrice(): Double {
-        return price * selectedQuantity
-    }
+    fun totalPrice(): Double = price * quantity
 }

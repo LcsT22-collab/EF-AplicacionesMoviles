@@ -1,4 +1,4 @@
-package pe.idat.e_commerce_ef.presentation.register
+package pe.idat.e_commerce_ef.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,12 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import pe.idat.e_commerce_ef.R
-import pe.idat.e_commerce_ef.presentation.main.MainActivity
+
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var etName: EditText

@@ -1,4 +1,4 @@
-package pe.idat.e_commerce_ef.presentation.products
+package pe.idat.e_commerce_ef.presentation
 
 import android.os.Bundle
 import android.widget.Button
@@ -6,7 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import coil.load
 import pe.idat.e_commerce_ef.R
 import pe.idat.e_commerce_ef.domain.model.Product
 import pe.idat.e_commerce_ef.util.CartManager
@@ -63,11 +63,12 @@ class ProductDetailActivity : AppCompatActivity() {
             tvDescription.text = product.description
             tvStock.text = "Stock: ${product.stock}"
 
-            Glide.with(this)
-                .load(product.image)
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_launcher_foreground)
-                .into(ivProduct)
+            // CORREGIR: Usar Coil y la URL correcta del producto
+            ivProduct.load(product.image) {
+                crossfade(true)
+                placeholder(R.drawable.ic_launcher_foreground)
+                error(R.drawable.ic_launcher_foreground)
+            }
         }
     }
 

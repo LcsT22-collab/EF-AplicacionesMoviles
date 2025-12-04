@@ -1,66 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".ECommerceApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
-        android:theme="@style/Theme.ECommerceEF.SafeArea"
-        android:usesCleartextTraffic="true">
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.EcommerceEF"
+        tools:targetApi="31">
 
-        <!-- Login Activity (Launcher) -->
+        <!-- Solo UNA MainActivity -->
         <activity
-            android:name=".presentation.login.LoginActivity"
-            android:exported="true">
+            android:name=".presentation.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-
-        <!-- Register Activity -->
+        <!-- Otras actividades -->
         <activity
-            android:name=".presentation.register.RegisterActivity"
-            android:exported="false" />
+            android:name=".presentation.LoginActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
-        <!-- Main Activity -->
         <activity
-            android:name=".presentation.main.MainActivity"
-            android:exported="false" />
+            android:name=".presentation.RegisterActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
-        <!-- Product List Activity -->
         <activity
-            android:name=".presentation.products.ProductListActivity"
-            android:exported="false" />
+            android:name=".presentation.ProductListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
-        <!-- Product Detail Activity -->
         <activity
-            android:name=".presentation.products.ProductDetailActivity"
-            android:parentActivityName=".presentation.products.ProductListActivity"
-            android:exported="false" />
+            android:name=".presentation.CartActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
-        <!-- Cart Activity -->
         <activity
-            android:name=".presentation.cart.CartActivity"
-            android:parentActivityName=".presentation.products.ProductListActivity"
-            android:exported="false" />
+            android:name=".presentation.CheckoutActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
-        <!-- Checkout Activity -->
         <activity
-            android:name=".presentation.chekout.CheckoutActivity"
-            android:parentActivityName=".presentation.cart.CartActivity"
-            android:exported="false" />
+            android:name=".presentation.ComprobanteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
-        <!-- Comprobante Activity -->
         <activity
-            android:name=".presentation.comprobante.ComprobanteActivity"
-            android:parentActivityName=".presentation.chekout.CheckoutActivity"
-            android:exported="false" />
+            android:name=".presentation.ProductDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
     </application>
+
 </manifest>

@@ -5,31 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="true">
+    android:background="@android:color/white">
 
-    <!-- Espacio para la barra de estado -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0"
-        android:background="@drawable/toolbar_gradient" />
-
-    <!-- TOOLBAR MEJORADO Y SEGURO -->
-    <com.google.android.material.appbar.MaterialToolbar
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/toolbar_gradient"
-        android:theme="@style/ThemeOverlay.Material3.Dark"
-        app:titleTextColor="?attr/colorOnPrimary">
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="8dp">
 
-            <!-- Flecha de retroceso -->
             <ImageButton
                 android:id="@+id/btnBack"
                 android:layout_width="48dp"
@@ -39,19 +29,17 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Volver"
                 android:padding="12dp"
-                android:src="@drawable/ic_arrow_back"
-                app:tint="?attr/colorOnPrimary" />
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@android:color/white" />
 
-            <!-- Título centrado -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Nuestra Tienda"
-                android:textColor="?attr/colorOnPrimary"
+                android:text="Productos"
+                android:textColor="@android:color/white"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.02" />
+                android:textStyle="bold" />
 
             <!-- Contenedor del carrito -->
             <RelativeLayout
@@ -65,40 +53,43 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Carrito de compras"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_shopping_cart"
-                    app:tint="?attr/colorOnPrimary" />
+                    android:contentDescription="Carrito"
+                    android:padding="12dp"
+                    android:src="@android:drawable/ic_menu_add"
+                    app:tint="@android:color/white" />
 
-                <!-- Badge mejorado -->
+                <!-- Badge para mostrar cantidad -->
                 <TextView
                     android:id="@+id/tvCartCount"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignTop="@id/btnCart"
                     android:layout_alignEnd="@id/btnCart"
-                    android:background="@drawable/badge_background"
+                    android:background="@color/colorAccent"
                     android:gravity="center"
                     android:text="0"
                     android:textColor="@android:color/white"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:visibility="gone" />
-
             </RelativeLayout>
-
         </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
-    </com.google.android.material.appbar.MaterialToolbar>
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
 
-    <!-- Contenido principal con mejor espaciado -->
+    <!-- Lista de productos -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProducts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="12dp"
-        android:clipToPadding="false"
-        android:paddingBottom="80dp" />
-
+        android:padding="12dp" />
 </LinearLayout>
