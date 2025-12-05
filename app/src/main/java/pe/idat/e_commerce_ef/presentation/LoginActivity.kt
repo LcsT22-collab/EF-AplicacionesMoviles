@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityLoginBinding
 import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
+import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModelFactory
 
 class LoginActivity : AppCompatActivity() {
 
@@ -20,12 +21,15 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // CORREGIR: Usar ViewModelProvider con Factory
+        // Usar ViewModelProvider con Factory
         val repository = AppRepository(applicationContext)
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
 
         setupListeners()
+
+        // Verificar si ya hay usuario autenticado (redirigir si es necesario)
+        checkCurrentUser()
     }
 
     private fun setupListeners() {
@@ -34,12 +38,17 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString()
 
             if (validateInputs(email, password)) {
-                // CORREGIR: Usar viewModel.login
+                // Mostrar indicador de carga
+                binding.btnLogin.isEnabled = false
+                binding.btnLogin.text = "Iniciando..."
+
                 viewModel.login(email, password) { result ->
                     runOnUiThread {
+                        binding.btnLogin.isEnabled = true
+                        binding.btnLogin.text = "Iniciar Sesión"
+
                         if (result.isSuccess) {
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
+                            goToMainActivity()
                         } else {
                             Toast.makeText(
                                 this,
@@ -69,5 +78,25 @@ class LoginActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun checkCurrentUser() {
+        val user = viewModel.getCurrentUser()
+        if (user != null) {
+            // Si ya hay usuario autenticado, ir directamente a MainActivity
+            goToMainActivity()
+        }
+    }
+
+    private fun goToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onBackPressed() {
+        // Evitar que se pueda regresar con el botón back
+        moveTaskToBack(true)
     }
 }

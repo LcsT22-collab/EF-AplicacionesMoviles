@@ -2,7 +2,6 @@ package pe.idat.e_commerce_ef.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -23,7 +22,7 @@ class ProductAdapter(
             binding.tvPrice.text = "S/. ${product.price}"
             binding.tvCategory.text = product.category
 
-            // CAMBIAR: Usar Coil en lugar de Glide
+            // Usar Coil para cargar imágenes
             binding.ivProduct.load(product.image) {
                 crossfade(true)
             }
@@ -33,7 +32,7 @@ class ProductAdapter(
             }
 
             itemView.setOnClickListener {
-                // Abrir detalle del producto
+                // Abrir detalle del producto (implementar si es necesario)
             }
         }
     }
@@ -49,15 +48,5 @@ class ProductAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-}
-
-class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
-    override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-        return oldItem.id == newItem.id
-    }
-
-    override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-        return oldItem == newItem
     }
 }

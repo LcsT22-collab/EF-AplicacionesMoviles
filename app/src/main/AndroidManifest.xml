@@ -3,22 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:theme="@style/Theme.EcommerceEF"
         tools:targetApi="31">
 
-        <!-- Solo UNA MainActivity -->
+        <!-- LoginActivity como actividad principal -->
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -27,9 +23,13 @@
             </intent-filter>
         </activity>
 
-        <!-- Otras actividades -->
         <activity
-            android:name=".presentation.LoginActivity"
+            android:name=".presentation.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".presentation.ProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -52,17 +52,5 @@
             android:name=".presentation.CheckoutActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".presentation.ComprobanteActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".presentation.ProductDetailActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
     </application>
-
 </manifest>

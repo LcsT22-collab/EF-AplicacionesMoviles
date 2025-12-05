@@ -55,7 +55,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Carrito"
                     android:padding="12dp"
-                    android:src="@android:drawable/ic_menu_add"
+                    android:src="@drawable/ic_shopping_cart"
                     app:tint="@android:color/white" />
 
                 <!-- Badge para mostrar cantidad -->

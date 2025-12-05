@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityMainBinding
 import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
+import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,58 +19,62 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // CORREGIR: Usar ViewModelProvider con un Factory
+        // Usar ViewModelProvider con Factory
         val repository = AppRepository(applicationContext)
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
 
-        setupUI()
-        setupObservers()
+        // Verificar autenticación ANTES de setupUI
+        checkAuthentication()
+    }
 
-        // Verificar autenticación
-        if (viewModel.getCurrentUser() == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+    private fun checkAuthentication() {
+        val user = viewModel.getCurrentUser()
+        if (user == null) {
+            // Si no hay usuario, ir directamente a Login
+            goToLogin()
+        } else {
+            // Si hay usuario, mostrar la UI
+            setupUI()
         }
     }
 
     private fun setupUI() {
+        // Botón para ir a productos
         binding.btnProducts.setOnClickListener {
             startActivity(Intent(this, ProductListActivity::class.java))
         }
 
-        binding.btnCart.setOnClickListener {
-            startActivity(Intent(this, CartActivity::class.java))
+        // Botón para ir al perfil
+        binding.btnProfile.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
 
+        // Botón para cerrar sesión
         binding.btnLogout.setOnClickListener {
             viewModel.logout()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
+            goToLogin()
         }
 
         // Mostrar usuario actual
         val user = viewModel.getCurrentUser()
-        binding.tvUser.text = "Hola, ${user?.displayName ?: user?.email}"
+        binding.tvUser.text = user?.email ?: "Usuario"
+        binding.tvWelcome.text = "¡Hola, ${user?.displayName?.split(" ")?.firstOrNull() ?: "Usuario"}!"
     }
 
-    private fun setupObservers() {
-        viewModel.cartItems.observe(this) { items ->
-            // Calcular la cantidad total de items en el carrito
-            val totalQuantity = items.sumOf { it.quantity }
-            binding.tvCartCount.text = totalQuantity.toString()
-            binding.tvCartCount.visibility = if (totalQuantity > 0) android.view.View.VISIBLE else android.view.View.GONE
-        }
+    private fun goToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
-}
 
-// AGREGAR ESTA CLASE EN EL MISMO ARCHIVO O EN UNO SEPARADO
-class AppViewModelFactory(private val repository: AppRepository) : ViewModelProvider.Factory {
-    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AppViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AppViewModel(repository) as T
+    // También verificar en onStart por si hay cambios en la autenticación
+    override fun onStart() {
+        super.onStart()
+        val user = viewModel.getCurrentUser()
+        if (user == null && !isFinishing) {
+            goToLogin()
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

@@ -24,7 +24,6 @@
         android:textColor="@color/colorPrimary"
         android:layout_marginBottom="8dp" />
 
-    <!-- AGREGAR ESTE TextView -->
     <TextView
         android:id="@+id/tvUser"
         android:layout_width="wrap_content"
@@ -44,34 +43,14 @@
         android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white" />
 
-    <!-- Agregar RelativeLayout para el botón del carrito con badge -->
-    <RelativeLayout
+    <!-- Botón Mi Perfil -->
+    <Button
+        android:id="@+id/btnProfile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
-
-        <Button
-            android:id="@+id/btnCart"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:text="Ver Carrito"
-            android:textSize="16sp" />
-
-        <!-- AGREGAR EL tvCartCount -->
-        <TextView
-            android:id="@+id/tvCartCount"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignTop="@id/btnCart"
-            android:layout_alignEnd="@id/btnCart"
-            android:background="@color/colorAccent"
-            android:gravity="center"
-            android:text="0"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
-    </RelativeLayout>
+        android:layout_height="56dp"
+        android:text="Mi Perfil"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btnLogout"

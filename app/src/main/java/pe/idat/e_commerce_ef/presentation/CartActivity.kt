@@ -2,6 +2,7 @@ package pe.idat.e_commerce_ef.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +11,7 @@ import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityCartBinding
 import pe.idat.e_commerce_ef.presentation.adapter.CartAdapter
 import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
+import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModelFactory
 import pe.idat.e_commerce_ef.util.CartManager
 
 class CartActivity : AppCompatActivity() {
@@ -23,7 +25,7 @@ class CartActivity : AppCompatActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // CORREGIR: Usar ViewModelProvider con Factory
+        // Usar ViewModelProvider con Factory
         val repository = AppRepository(applicationContext)
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
@@ -31,9 +33,9 @@ class CartActivity : AppCompatActivity() {
         setupViews()
         setupObservers()
     }
+
     private fun setupViews() {
         cartAdapter = CartAdapter(emptyList()) { product ->
-            // CORREGIR: Usar viewModel.removeFromCart
             viewModel.removeFromCart(product)
             Toast.makeText(this, "❌ ${product.name} removido", Toast.LENGTH_SHORT).show()
         }
@@ -53,7 +55,6 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun setupObservers() {
-        // CORREGIR: Observar cartItems del AppViewModel
         viewModel.cartItems.observe(this) { items ->
             cartAdapter.updateCartItems(items)
             updateTotal(CartManager.total)
@@ -67,15 +68,15 @@ class CartActivity : AppCompatActivity() {
 
     private fun updateEmptyState(isEmpty: Boolean) {
         if (isEmpty) {
-            binding.tvEmptyCart.visibility = android.view.View.VISIBLE
-            binding.recyclerViewCart.visibility = android.view.View.GONE
-            binding.tvTotal.visibility = android.view.View.GONE
-            binding.btnCheckout.visibility = android.view.View.GONE
+            binding.tvEmptyCart.visibility = View.VISIBLE
+            binding.recyclerViewCart.visibility = View.GONE
+            binding.tvTotal.visibility = View.GONE
+            binding.btnCheckout.visibility = View.GONE
         } else {
-            binding.tvEmptyCart.visibility = android.view.View.GONE
-            binding.recyclerViewCart.visibility = android.view.View.VISIBLE
-            binding.tvTotal.visibility = android.view.View.VISIBLE
-            binding.btnCheckout.visibility = android.view.View.VISIBLE
+            binding.tvEmptyCart.visibility = View.GONE
+            binding.recyclerViewCart.visibility = View.VISIBLE
+            binding.tvTotal.visibility = View.VISIBLE
+            binding.btnCheckout.visibility = View.VISIBLE
         }
     }
 

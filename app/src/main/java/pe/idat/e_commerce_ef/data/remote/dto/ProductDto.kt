@@ -9,7 +9,3 @@ data class ProductDto(
     val image: String,
     val stock: Int
 )
-
-data class ProductsResponse(
-    val products: List<ProductDto>
-)

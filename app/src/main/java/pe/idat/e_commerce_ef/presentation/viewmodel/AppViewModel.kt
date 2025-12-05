@@ -59,7 +59,6 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
         updateCart()
     }
 
-    // AGREGAR ESTE MÉTODO
     fun updateCart() {
         _cartItems.value = CartManager.items
     }
@@ -80,6 +79,8 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     fun logout() {
+        // Limpiar el carrito también al hacer logout
+        CartManager.clearCart()
         repository.logout()
     }
 

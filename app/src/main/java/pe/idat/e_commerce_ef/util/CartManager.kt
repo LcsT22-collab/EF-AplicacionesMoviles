@@ -1,4 +1,3 @@
-// CartManager.kt
 package pe.idat.e_commerce_ef.util
 
 import pe.idat.e_commerce_ef.domain.model.Product
@@ -26,5 +25,12 @@ object CartManager {
         cart.removeAll { it.id == product.id }
     }
 
-    fun clearCart() = cart.clear()
+    fun clearCart() {
+        cart.clear()
+    }
+
+    // Nuevo metodo para forzar reset del carrito
+    fun forceReset() {
+        cart.clear()
+    }
 }

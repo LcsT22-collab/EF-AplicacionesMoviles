@@ -1,7 +1,5 @@
 package pe.idat.e_commerce_ef.domain.model
 
-import java.io.Serializable
-
 data class Product(
     val id: Int,
     val name: String,
