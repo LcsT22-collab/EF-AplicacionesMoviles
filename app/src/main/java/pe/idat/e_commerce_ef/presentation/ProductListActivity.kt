@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import pe.idat.e_commerce_ef.R
 import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityProductListBinding
 import pe.idat.e_commerce_ef.presentation.adapter.ProductAdapter
@@ -33,24 +35,30 @@ class ProductListActivity : AppCompatActivity() {
         setupListeners()
 
         viewModel.loadProducts()
-        resetCartCounter()
+        updateCartCounterFromViewModel()
     }
 
     private fun setupRecyclerView() {
         adapter = ProductAdapter { product, quantity ->
             viewModel.addToCart(product, quantity)
-            Toast.makeText(this, "✅ ${product.name} agregado al carrito", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                getString(R.string.add_to_cart_success, product.name),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.recyclerViewProducts.apply {
-            layoutManager = LinearLayoutManager(this@ProductListActivity)
+            layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
             adapter = this@ProductListActivity.adapter
+            setHasFixedSize(true)
         }
     }
 
     private fun setupObservers() {
         viewModel.products.observe(this) { products ->
             adapter.submitList(products)
+            binding.progressBar.visibility = View.GONE
         }
 
         viewModel.loading.observe(this) { isLoading ->
@@ -64,6 +72,7 @@ class ProductListActivity : AppCompatActivity() {
         viewModel.error.observe(this) { error ->
             error?.let {
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+                binding.progressBar.visibility = View.GONE
             }
         }
     }
@@ -88,14 +97,13 @@ class ProductListActivity : AppCompatActivity() {
         }
     }
 
-    private fun resetCartCounter() {
-        binding.tvCartCount.visibility = View.GONE
+    private fun updateCartCounterFromViewModel() {
         viewModel.updateCart()
     }
 
     override fun onResume() {
         super.onResume()
-        resetCartCounter()
+        updateCartCounterFromViewModel()
     }
 
     override fun onBackPressed() {

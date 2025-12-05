@@ -18,19 +18,26 @@ class CartAdapter(
 
         fun bind(product: Product) {
             binding.tvCartTitle.text = product.name
-            binding.tvCartPrice.text = "S/. ${String.format("%.2f", product.totalPrice())} (x${product.quantity})"
-            binding.tvCartCategory.text = "${product.category} | Cantidad: ${product.quantity}"
+            binding.tvCartPrice.text = getString(
+                R.string.format_price_with_quantity,
+                product.totalPrice(),
+                product.quantity
+            )
+            binding.tvCartCategory.text = getString(
+                R.string.category_format,
+                product.category,
+                product.quantity
+            )
 
-            // CAMBIAR: Usar Coil en lugar de Glide
-            binding.ivCartProduct.load(product.image) {
-                crossfade(true)
-                placeholder(R.drawable.ic_launcher_foreground)
-                error(R.drawable.ic_launcher_foreground)
-            }
+            binding.ivCartProduct.load(product.image)
 
             binding.btnRemoveFromCart.setOnClickListener {
                 onRemoveFromCart(product)
             }
+        }
+
+        private fun getString(resId: Int, vararg args: Any): String {
+            return binding.root.context.getString(resId, *args)
         }
     }
 

@@ -6,6 +6,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import pe.idat.e_commerce_ef.R
 import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityLoginBinding
 import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
@@ -35,19 +36,19 @@ class LoginActivity : AppCompatActivity() {
 
             if (validateInputs(email, password)) {
                 binding.btnLogin.isEnabled = false
-                binding.btnLogin.text = "Iniciando..."
+                binding.btnLogin.text = getString(R.string.loading_login)
 
                 viewModel.login(email, password) { result ->
                     runOnUiThread {
                         binding.btnLogin.isEnabled = true
-                        binding.btnLogin.text = "Iniciar Sesión"
+                        binding.btnLogin.text = getString(R.string.login_button)
 
                         if (result.isSuccess) {
                             goToMainActivity()
                         } else {
                             Toast.makeText(
                                 this,
-                                result.exceptionOrNull()?.message ?: "Error de inicio de sesión",
+                                result.exceptionOrNull()?.message ?: getString(R.string.error_login),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -63,12 +64,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun validateInputs(email: String, password: String): Boolean {
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_empty_fields), Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Email inválido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show()
             return false
         }
 

@@ -47,39 +47,43 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         btnRegister.isEnabled = false
-        btnRegister.text = "Registrando..."
+        btnRegister.text = getString(R.string.loading_register)
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 btnRegister.isEnabled = true
-                btnRegister.text = "Registrarse"
+                btnRegister.text = getString(R.string.register_button)
 
                 if (task.isSuccessful) {
                     updateUserProfile(name)
                 } else {
-                    Toast.makeText(this, task.exception?.message ?: "Error en registro", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        task.exception?.message ?: getString(R.string.error_register),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
 
     private fun validateInputs(name: String, email: String, password: String): Boolean {
         if (name.isEmpty()) {
-            Toast.makeText(this, "Ingresa tu nombre completo", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_empty_fields), Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (email.isEmpty()) {
-            Toast.makeText(this, "Ingresa tu email", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_empty_fields), Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Email inválido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_invalid_email), Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (password.length < 6) {
-            Toast.makeText(this, "La contraseña debe tener mínimo 6 caracteres", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.error_password_length), Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -95,10 +99,10 @@ class RegisterActivity : AppCompatActivity() {
         user?.updateProfile(profileUpdates)
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.register_success), Toast.LENGTH_SHORT).show()
                     goToMainActivity()
                 } else {
-                    Toast.makeText(this, "Error al guardar nombre", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.error_save_name), Toast.LENGTH_SHORT).show()
                 }
             }
     }

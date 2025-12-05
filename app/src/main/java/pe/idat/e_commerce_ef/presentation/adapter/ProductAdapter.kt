@@ -1,5 +1,6 @@
 package pe.idat.e_commerce_ef.presentation.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import pe.idat.e_commerce_ef.databinding.ItemProductBinding
 import pe.idat.e_commerce_ef.domain.model.Product
+import pe.idat.e_commerce_ef.presentation.ProductDetailActivity
 
 class ProductAdapter(
     private val onAddToCart: (Product, Int) -> Unit
@@ -19,7 +21,7 @@ class ProductAdapter(
 
         fun bind(product: Product) {
             binding.tvName.text = product.name
-            binding.tvPrice.text = "S/. ${product.price}"
+            binding.tvPrice.text = "S/. ${String.format("%.2f", product.price)}"
             binding.tvCategory.text = product.category
 
             // Usar Coil para cargar imágenes
@@ -27,13 +29,39 @@ class ProductAdapter(
                 crossfade(true)
             }
 
+            // Click en el botón para agregar al carrito (evita que abra el detalle)
             binding.btnAddToCart.setOnClickListener {
+                it.isClickable = true
                 onAddToCart(product, 1)
             }
 
-            itemView.setOnClickListener {
-                // Abrir detalle del producto (implementar si es necesario)
+            // Click en la imagen para ver detalles
+            binding.ivProduct.setOnClickListener {
+                openProductDetail(product)
             }
+
+            // Click en el contenedor completo (LinearLayout) para ver detalles
+            binding.root.setOnClickListener {
+                openProductDetail(product)
+            }
+
+            // Click en el nombre para ver detalles
+            binding.tvName.setOnClickListener {
+                openProductDetail(product)
+            }
+
+            // Click en el precio para ver detalles
+            binding.tvPrice.setOnClickListener {
+                openProductDetail(product)
+            }
+        }
+
+        private fun openProductDetail(product: Product) {
+            val context = itemView.context
+            val intent = Intent(context, ProductDetailActivity::class.java).apply {
+                putExtra("product", product)
+            }
+            context.startActivity(intent)
         }
     }
 

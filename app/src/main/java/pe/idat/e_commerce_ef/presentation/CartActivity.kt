@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import pe.idat.e_commerce_ef.R
 import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityCartBinding
 import pe.idat.e_commerce_ef.presentation.adapter.CartAdapter
@@ -36,7 +37,11 @@ class CartActivity : AppCompatActivity() {
     private fun setupViews() {
         cartAdapter = CartAdapter(emptyList()) { product ->
             viewModel.removeFromCart(product)
-            Toast.makeText(this, "❌ ${product.name} removido", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                getString(R.string.remove_from_cart_success, product.name),
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.recyclerViewCart.apply {
@@ -62,19 +67,17 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun updateTotal(total: Double) {
-        binding.tvTotal.text = "Total: S/. ${String.format("%.2f", total)}"
+        binding.tvTotal.text = getString(R.string.format_price, total)
     }
 
     private fun updateEmptyState(isEmpty: Boolean) {
         if (isEmpty) {
             binding.tvEmptyCart.visibility = View.VISIBLE
             binding.recyclerViewCart.visibility = View.GONE
-            binding.tvTotal.visibility = View.GONE
             binding.btnCheckout.visibility = View.GONE
         } else {
             binding.tvEmptyCart.visibility = View.GONE
             binding.recyclerViewCart.visibility = View.VISIBLE
-            binding.tvTotal.visibility = View.VISIBLE
             binding.btnCheckout.visibility = View.VISIBLE
         }
     }
@@ -84,7 +87,7 @@ class CartActivity : AppCompatActivity() {
             val intent = Intent(this, CheckoutActivity::class.java)
             startActivity(intent)
         } else {
-            Toast.makeText(this, "El carrito está vacío", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.empty_cart_error), Toast.LENGTH_SHORT).show()
         }
     }
 

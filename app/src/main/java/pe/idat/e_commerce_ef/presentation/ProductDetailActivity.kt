@@ -1,52 +1,34 @@
 package pe.idat.e_commerce_ef.presentation
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import coil.load
 import pe.idat.e_commerce_ef.R
+import pe.idat.e_commerce_ef.databinding.ActivityProductDetailBinding
 import pe.idat.e_commerce_ef.domain.model.Product
 import pe.idat.e_commerce_ef.util.CartManager
 
-class ProductDetailActivity : BaseActivity() {
+class ProductDetailActivity : AppCompatActivity() {
 
-    private lateinit var ivProduct: ImageView
-    private lateinit var tvTitle: TextView
-    private lateinit var tvPrice: TextView
-    private lateinit var tvCategory: TextView
-    private lateinit var tvDescription: TextView
-    private lateinit var tvStock: TextView
-    private lateinit var btnAddToCart: Button
-    private lateinit var btnBack: ImageView
-
+    private lateinit var binding: ActivityProductDetailBinding
     private var currentProduct: Product? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_detail)
+        binding = ActivityProductDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setupViews()
+        setupListeners()
         loadProductDetails()
     }
 
-    private fun setupViews() {
-        ivProduct = findViewById(R.id.ivProductDetail)
-        tvTitle = findViewById(R.id.tvProductTitle)
-        tvPrice = findViewById(R.id.tvProductPrice)
-        tvCategory = findViewById(R.id.tvProductCategory)
-        tvDescription = findViewById(R.id.tvProductDescription)
-        tvStock = findViewById(R.id.tvProductStock)
-        btnAddToCart = findViewById(R.id.btnAddToCartDetail)
-        btnBack = findViewById(R.id.btnBackDetail)
-
-        btnBack.setOnClickListener {
+    private fun setupListeners() {
+        binding.btnBackDetail.setOnClickListener {
             onBackPressed()
         }
 
-        btnAddToCart.setOnClickListener {
+        binding.btnAddToCartDetail.setOnClickListener {
             currentProduct?.let { product ->
                 addToCart(product)
             }
@@ -57,23 +39,35 @@ class ProductDetailActivity : BaseActivity() {
         currentProduct = intent.getSerializableExtra("product") as? Product
 
         currentProduct?.let { product ->
-            tvTitle.text = product.name
-            tvPrice.text = "S/. ${String.format("%.2f", product.price)}"
-            tvCategory.text = product.category
-            tvDescription.text = product.description
-            tvStock.text = "Stock: ${product.stock}"
+            binding.tvProductTitle.text = product.name
+            binding.tvProductPrice.text = getString(R.string.format_price, product.price)
+            binding.tvProductCategory.text = product.category
+            binding.tvProductDescription.text = product.description
+            binding.tvProductStock.text = getString(R.string.stock_label, product.stock)
 
-            // Usar Coil para cargar imagen
-            ivProduct.load(product.image) {
+            binding.ivProductDetail.load(product.image) {
                 crossfade(true)
-                placeholder(R.drawable.ic_launcher_foreground)
-                error(R.drawable.ic_launcher_foreground)
             }
+        } ?: run {
+            Toast.makeText(this, getString(R.string.error_load_product), Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
     private fun addToCart(product: Product) {
         CartManager.addToCart(product)
-        Toast.makeText(this, "✅ ${product.name} agregado al carrito", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            getString(R.string.add_to_cart_success, product.name),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(
+            android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right
+        )
     }
 }

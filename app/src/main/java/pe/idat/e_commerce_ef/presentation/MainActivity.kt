@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
+import pe.idat.e_commerce_ef.R
 import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityMainBinding
 import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
@@ -24,18 +26,28 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
 
         checkAuthentication()
+        setupUI()
+        setupListeners()
     }
 
     private fun checkAuthentication() {
-        val user = viewModel.getCurrentUser()
+        val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
             goToLogin()
-        } else {
-            setupUI()
         }
     }
 
     private fun setupUI() {
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            binding.tvUserEmail.text = it.email ?: getString(R.string.default_email)
+            val displayName = it.displayName ?: getString(R.string.default_user)
+            val firstName = displayName.split(" ").first()
+            binding.tvWelcome.text = getString(R.string.user_greeting, firstName)
+        }
+    }
+
+    private fun setupListeners() {
         binding.btnProducts.setOnClickListener {
             startActivity(Intent(this, ProductListActivity::class.java))
         }
@@ -48,10 +60,6 @@ class MainActivity : AppCompatActivity() {
             viewModel.logout()
             goToLogin()
         }
-
-        val user = viewModel.getCurrentUser()
-        binding.tvUser.text = user?.email ?: "Usuario"
-        binding.tvWelcome.text = "¡Hola, ${user?.displayName?.split(" ")?.firstOrNull() ?: "Usuario"}!"
     }
 
     private fun goToLogin() {
@@ -63,8 +71,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val user = viewModel.getCurrentUser()
-        if (user == null && !isFinishing) {
+        if (FirebaseAuth.getInstance().currentUser == null && !isFinishing) {
             goToLogin()
         }
     }
