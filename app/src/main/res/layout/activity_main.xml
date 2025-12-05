@@ -18,17 +18,17 @@
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¡Bienvenido!"
+        android:text="@string/welcome_message"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/colorPrimary"
         android:layout_marginBottom="8dp" />
 
     <TextView
-        android:id="@+id/tvUser"
+        android:id="@+id/tvUserEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="email@ejemplo.com"
+        android:text="@string/default_email"
         android:textSize="16sp"
         android:textColor="@android:color/darker_gray"
         android:layout_marginBottom="32dp" />
@@ -37,25 +37,28 @@
         android:id="@+id/btnProducts"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Ir a la Tienda"
+        android:text="@string/go_to_store"
         android:textSize="16sp"
         android:layout_marginBottom="16dp"
         android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white" />
 
-    <!-- Botón Mi Perfil -->
     <Button
         android:id="@+id/btnProfile"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Mi Perfil"
+        android:text="@string/my_profile"
         android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/dark_gray"
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:text="Cerrar Sesión"
-        android:textSize="16sp" />
+        android:text="@string/logout"
+        android:textSize="16sp"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="@android:color/white" />
 </LinearLayout>

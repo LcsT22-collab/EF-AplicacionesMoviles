@@ -1,21 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">E-Commerce EF</string>
-    <string name="btn_login">Iniciar Sesión</string>
-    <string name="btn_register">Registrarse</string>
-    <string name="hint_email">Email</string>
-    <string name="hint_password">Contraseña</string>
-    <string name="hint_name">Nombre completo</string>
-    <string name="logo">Logo de la aplicación</string>
-    <string name="avatar">Avatar del usuario</string>
 
-    <string name="comprobante_selection_title">Seleccionar Tipo de Comprobante</string>
-    <string name="comprobante_boleta">Boleta</string>
-    <string name="comprobante_factura">Factura</string>
-    <string name="hint_razon_social">Razón Social</string>
-    <string name="hint_ruc">RUC</string>
-    <string name="hint_direccion_fiscal">Dirección Fiscal</string>
-    <string name="btn_continuar">Continuar</string>
-    <string name="btn_compartir">Compartir</string>
-    <string name="btn_finalizar">Finalizar</string>
+    <string name="login_title">Iniciar Sesión</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Contraseña</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <string name="go_to_register">¿No tienes cuenta? Regístrate</string>
+    <string name="loading_login">Iniciando...</string>
+
+    <string name="register_title">Crear Cuenta</string>
+    <string name="name_hint">Nombre completo</string>
+    <string name="register_button">Registrarse</string>
+    <string name="loading_register">Registrando...</string>
+
+    <string name="welcome_message">¡Bienvenido!</string>
+    <string name="go_to_store">Ir a la Tienda</string>
+    <string name="my_profile">Mi Perfil</string>
+    <string name="logout">Cerrar Sesión</string>
+    <string name="default_email">email@ejemplo.com</string>
+    <string name="user_greeting">¡Hola, %s!</string>
+
+    <string name="products_title">Productos</string>
+    <string name="cart_empty">🛒 Tu carrito está vacío</string>
+    <string name="add_to_cart_success">✅ %s agregado al carrito</string>
+    <string name="remove_from_cart_success">❌ %s removido</string>
+
+    <string name="product_detail_title">Detalles del Producto</string>
+    <string name="description_label">Descripción</string>
+    <string name="stock_label">Stock: %d</string>
+    <string name="add_to_cart_button">Agregar al Carrito</string>
+
+    <string name="cart_title">Mi Carrito</string>
+    <string name="total_label">Total:</string>
+    <string name="checkout_button">Realizar Compra</string>
+    <string name="empty_cart_message">Tu carrito está vacío</string>
+    <string name="format_price">S/. %.2f</string>
+    <string name="format_quantity">(x%d)</string>
+    <string name="category_format">%s | Cantidad: %d</string>
+
+    <string name="checkout_title">Finalizar Compra</string>
+    <string name="order_summary_title">Resumen de tu Compra</string>
+    <string name="items_label">Items:</string>
+    <string name="total_checkout_label">Total:</string>
+    <string name="confirm_purchase_button">Confirmar Compra</string>
+    <string name="order_summary_format">%d. %s\n   Cantidad: %d x %s\n   Subtotal: %s\n\n</string>
+    <string name="purchase_success_message">✅ ¡Compra realizada exitosamente!\nGracias por tu compra</string>
+    <string name="empty_cart_error">El carrito está vacío</string>
+
+    <string name="profile_title">Mi Perfil</string>
+    <string name="personal_info_title">Información Personal</string>
+    <string name="name_label">Nombre</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Contraseña</string>
+    <string name="user_id_label">ID de Usuario</string>
+    <string name="change_password_button">Cambiar Contraseña</string>
+    <string name="loading_text">Cargando...</string>
+    <string name="password_display">********</string>
+    <string name="not_specified">No especificado</string>
+
+    <string name="error_empty_fields">Completa todos los campos</string>
+    <string name="error_invalid_email">Email inválido</string>
+    <string name="error_password_length">La contraseña debe tener mínimo 6 caracteres</string>
+    <string name="error_login">Error de inicio de sesión</string>
+    <string name="error_register">Error en registro</string>
+    <string name="error_load_product">Error al cargar el producto</string>
+    <string name="error_no_data">No hay datos disponibles</string>
+    <string name="error_save_name">Error al guardar nombre</string>
+
+    <string name="default_product_title">Product Title</string>
+    <string name="default_product_description">Product description</string>
+    <string name="default_category">Category</string>
+    <string name="default_price">S/. 0.00</string>
+    <string name="loading_products">Cargando productos...</string>
+    <string name="default_user">Usuario</string>
+
+
+    <string name="back">Volver</string>
+    <string name="register_success">Registro exitoso</string>
+    <string name="format_price_with_quantity">S/. %.2f (x%d)</string>
+
 
 </resources>
