@@ -58,10 +58,5 @@
             android:name=".presentation.ProductDetailActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".presentation.ComprobanteActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
     </application>
 </manifest>
