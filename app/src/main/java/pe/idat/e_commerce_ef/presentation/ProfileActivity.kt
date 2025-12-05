@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import pe.idat.e_commerce_ef.databinding.ActivityProfileBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -17,7 +15,6 @@ class ProfileActivity : AppCompatActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inicializar Firebase Auth
         auth = FirebaseAuth.getInstance()
 
         setupViews()
@@ -25,7 +22,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        // Botón para regresar
         binding.btnBackProfile.setOnClickListener {
             onBackPressed()
         }
@@ -35,19 +31,10 @@ class ProfileActivity : AppCompatActivity() {
         val user = auth.currentUser
 
         if (user != null) {
-            // Mostrar email
             binding.tvProfileEmail.text = user.email ?: "No especificado"
-
-            // Mostrar ID de usuario (UID)
             binding.tvProfileUid.text = user.uid
-
-            // Mostrar nombre si está disponible
             binding.tvProfileName.text = user.displayName ?: "Usuario"
-
-            // Mostrar contraseña en asteriscos (solo visual)
-            // Nota: Firebase NO almacena contraseñas visibles
             binding.tvProfilePassword.text = "********"
-
         }
     }
 

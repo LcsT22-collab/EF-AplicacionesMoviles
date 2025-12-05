@@ -21,15 +21,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Usar ViewModelProvider con Factory
         val repository = AppRepository(applicationContext)
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
 
         setupListeners()
-
-        // Verificar si ya hay usuario autenticado (redirigir si es necesario)
-        checkCurrentUser()
     }
 
     private fun setupListeners() {
@@ -38,7 +34,6 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.etPassword.text.toString()
 
             if (validateInputs(email, password)) {
-                // Mostrar indicador de carga
                 binding.btnLogin.isEnabled = false
                 binding.btnLogin.text = "Iniciando..."
 
@@ -80,14 +75,6 @@ class LoginActivity : AppCompatActivity() {
         return true
     }
 
-    private fun checkCurrentUser() {
-        val user = viewModel.getCurrentUser()
-        if (user != null) {
-            // Si ya hay usuario autenticado, ir directamente a MainActivity
-            goToMainActivity()
-        }
-    }
-
     private fun goToMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -96,7 +83,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // Evitar que se pueda regresar con el botón back
         moveTaskToBack(true)
     }
 }

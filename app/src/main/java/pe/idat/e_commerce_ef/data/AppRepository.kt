@@ -1,4 +1,3 @@
-// AppRepository.kt
 package pe.idat.e_commerce_ef.data
 
 import android.content.Context
@@ -12,28 +11,20 @@ import kotlinx.coroutines.tasks.await
 
 class AppRepository(context: Context) {
 
-    // Room
     private val db = AppDatabase.getDatabase(context)
     private val productDao = db.productDao()
-
-    // Firebase
     private val auth = FirebaseAuth.getInstance()
-
-    // API
     private val api = ProductService.create()
 
     // Funciones de productos
     suspend fun getProducts(): Result<List<Product>> {
         return try {
-            // Intentar desde API
             val response = api.getProducts()
             if (response.isSuccessful) {
                 val products = response.body()?.products?.map { ProductMapper.dtoToDomain(it) } ?: emptyList()
-                // Guardar en Room
                 productDao.insertAll(products.map { ProductMapper.domainToEntity(it) })
                 Result.success(products)
             } else {
-                // Fallback a Room
                 val localProducts = productDao.getAll().map { ProductMapper.entityToDomain(it) }
                 if (localProducts.isNotEmpty()) {
                     Result.success(localProducts)
@@ -42,7 +33,6 @@ class AppRepository(context: Context) {
                 }
             }
         } catch (e: Exception) {
-            // Intentar desde Room
             try {
                 val localProducts = productDao.getAll().map { ProductMapper.entityToDomain(it) }
                 Result.success(localProducts)
@@ -76,7 +66,10 @@ class AppRepository(context: Context) {
         }
     }
 
-    fun logout() = auth.signOut()
+    // AGREGADO: Metodo logout
+    fun logout() {
+        auth.signOut()
+    }
 
     fun getCurrentUser() = auth.currentUser
 

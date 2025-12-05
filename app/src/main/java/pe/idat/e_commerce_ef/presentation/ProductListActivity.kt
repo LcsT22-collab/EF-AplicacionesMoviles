@@ -24,7 +24,6 @@ class ProductListActivity : AppCompatActivity() {
         binding = ActivityProductListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Usar ViewModelProvider con Factory
         val repository = AppRepository(applicationContext)
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
@@ -33,10 +32,7 @@ class ProductListActivity : AppCompatActivity() {
         setupObservers()
         setupListeners()
 
-        // Cargar productos al iniciar
         viewModel.loadProducts()
-
-        // Resetear el contador cuando se crea la actividad
         resetCartCounter()
     }
 
@@ -61,7 +57,6 @@ class ProductListActivity : AppCompatActivity() {
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // IMPORTANTE: Observar los cambios del carrito
         viewModel.cartItems.observe(this) { items ->
             updateCartCounter(items)
         }
@@ -75,7 +70,7 @@ class ProductListActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
-            finish()
+            onBackPressed()
         }
 
         binding.btnCart.setOnClickListener {
@@ -83,7 +78,6 @@ class ProductListActivity : AppCompatActivity() {
         }
     }
 
-    // Metodo para actualizar el contador del carrito
     private fun updateCartCounter(items: List<pe.idat.e_commerce_ef.domain.model.Product>) {
         val totalQuantity = items.sumOf { it.quantity }
         if (totalQuantity > 0) {
@@ -94,17 +88,18 @@ class ProductListActivity : AppCompatActivity() {
         }
     }
 
-    // Metodo para resetear el contador
     private fun resetCartCounter() {
         binding.tvCartCount.visibility = View.GONE
-        // También forzamos una actualización del carrito en el ViewModel
         viewModel.updateCart()
     }
 
-    // Sobrescribir onResume para resetear cuando se vuelve a esta actividad
     override fun onResume() {
         super.onResume()
-        // Resetear contador cada vez que la actividad se hace visible
         resetCartCounter()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
     }
 }

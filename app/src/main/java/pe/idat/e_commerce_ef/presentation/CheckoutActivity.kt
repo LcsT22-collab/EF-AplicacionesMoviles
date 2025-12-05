@@ -34,13 +34,9 @@ class CheckoutActivity : AppCompatActivity() {
     }
 
     private fun confirmPurchase() {
-        // Limpiar el carrito
         CartManager.clearCart()
-
-        // Mostrar mensaje de éxito
         Toast.makeText(this, "✅ Compra realizada exitosamente", Toast.LENGTH_LONG).show()
 
-        // Regresar a ProductListActivity y limpiar el stack
         val intent = Intent(this, ProductListActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
@@ -57,7 +53,14 @@ class CheckoutActivity : AppCompatActivity() {
         val summary = StringBuilder()
         CartManager.items.forEach { product ->
             val productTotal = product.price * product.quantity
-            summary.append("• ${product.name} - S/. ${String.format("%.2f", product.price)} x${product.quantity} = S/. ${String.format("%.2f", productTotal)}\n")
+            summary.append(
+                "• ${product.name} - S/. ${
+                    String.format(
+                        "%.2f",
+                        product.price
+                    )
+                } x${product.quantity} = S/. ${String.format("%.2f", productTotal)}\n"
+            )
         }
         binding.tvOrderSummary.text = summary.toString()
     }

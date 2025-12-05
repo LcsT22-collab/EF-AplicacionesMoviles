@@ -11,7 +11,7 @@ import pe.idat.e_commerce_ef.R
 import pe.idat.e_commerce_ef.domain.model.Product
 import pe.idat.e_commerce_ef.util.CartManager
 
-class ProductDetailActivity : AppCompatActivity() {
+class ProductDetailActivity : BaseActivity() {
 
     private lateinit var ivProduct: ImageView
     private lateinit var tvTitle: TextView
@@ -63,7 +63,7 @@ class ProductDetailActivity : AppCompatActivity() {
             tvDescription.text = product.description
             tvStock.text = "Stock: ${product.stock}"
 
-            // CORREGIR: Usar Coil y la URL correcta del producto
+            // Usar Coil para cargar imagen
             ivProduct.load(product.image) {
                 crossfade(true)
                 placeholder(R.drawable.ic_launcher_foreground)

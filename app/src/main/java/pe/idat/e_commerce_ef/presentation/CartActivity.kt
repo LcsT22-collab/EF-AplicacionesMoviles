@@ -25,7 +25,6 @@ class CartActivity : AppCompatActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Usar ViewModelProvider con Factory
         val repository = AppRepository(applicationContext)
         val factory = AppViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
@@ -91,7 +90,6 @@ class CartActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Actualizar carrito cuando vuelve a la actividad
         viewModel.updateCart()
     }
 

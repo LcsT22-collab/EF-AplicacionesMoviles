@@ -7,10 +7,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.auth.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.ktx.auth
 import pe.idat.e_commerce_ef.R
 
@@ -26,22 +25,16 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // Inicializar Firebase
         auth = Firebase.auth
 
-        // Enlazar vistas
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmailReg)
         etPassword = findViewById(R.id.etPasswordReg)
         btnRegister = findViewById(R.id.btnSubmit)
 
-        // Configurar botón de registro
         btnRegister.setOnClickListener {
             performRegistration()
         }
-
-        // Verificar si ya está autenticado
-        checkCurrentUser()
     }
 
     private fun performRegistration() {
@@ -64,30 +57,29 @@ class RegisterActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     updateUserProfile(name)
                 } else {
-                    val errorMessage = task.exception?.message ?: "Error en registro"
-                    showToast(errorMessage)
+                    Toast.makeText(this, task.exception?.message ?: "Error en registro", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
     private fun validateInputs(name: String, email: String, password: String): Boolean {
         if (name.isEmpty()) {
-            showToast("Ingresa tu nombre completo")
+            Toast.makeText(this, "Ingresa tu nombre completo", Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (email.isEmpty()) {
-            showToast("Ingresa tu email")
+            Toast.makeText(this, "Ingresa tu email", Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showToast("Email inválido")
+            Toast.makeText(this, "Email inválido", Toast.LENGTH_SHORT).show()
             return false
         }
 
         if (password.length < 6) {
-            showToast("La contraseña debe tener mínimo 6 caracteres")
+            Toast.makeText(this, "La contraseña debe tener mínimo 6 caracteres", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -103,19 +95,12 @@ class RegisterActivity : AppCompatActivity() {
         user?.updateProfile(profileUpdates)
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    showToast("Registro exitoso")
+                    Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show()
                     goToMainActivity()
                 } else {
-                    showToast("Registro completado, pero error al guardar nombre")
+                    Toast.makeText(this, "Error al guardar nombre", Toast.LENGTH_SHORT).show()
                 }
             }
-    }
-
-    private fun checkCurrentUser() {
-        val user = auth.currentUser
-        if (user != null) {
-            goToMainActivity()
-        }
     }
 
     private fun goToMainActivity() {
@@ -125,7 +110,8 @@ class RegisterActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
     }
 }
