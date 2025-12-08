@@ -102,7 +102,7 @@
             android:id="@+id/btnCheckout"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="@string/checkout_button"
+            android:text="✅ FINALIZAR COMPRA"
             android:textSize="16sp"
             android:textStyle="bold"
             android:backgroundTint="@color/colorPrimary"

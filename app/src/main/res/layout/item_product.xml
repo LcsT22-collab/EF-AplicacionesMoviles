@@ -60,10 +60,11 @@
             android:id="@+id/btnAddToCart"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="@string/add_to_cart_button"
+            android:text="🛒 AGREGAR"
             android:textSize="14sp"
             android:backgroundTint="@color/colorPrimary"
             android:textColor="@android:color/white"
+            android:textStyle="bold"
             style="@style/Widget.Material3.Button" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

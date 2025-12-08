@@ -24,10 +24,10 @@
     <string name="product_detail_title">Detalles del Producto</string>
     <string name="description_label">Descripción</string>
     <string name="stock_label">Stock: %d</string>
-    <string name="add_to_cart_button">Agregar al Carrito</string>
+    <string name="add_to_cart_button">🛒 AGREGAR AL CARRITO</string>
     <string name="cart_title">Mi Carrito</string>
     <string name="total_label">Total:</string>
-    <string name="checkout_button">Realizar Compra</string>
+    <string name="checkout_button">FINALIZAR COMPRA</string>
     <string name="empty_cart_message">Tu carrito está vacío</string>
     <string name="format_price">S/. %.2f</string>
     <string name="format_quantity">(x%d)</string>
@@ -37,7 +37,7 @@
     <string name="order_summary_title">Resumen de tu Compra</string>
     <string name="items_label">Items:</string>
     <string name="total_checkout_label">Total:</string>
-    <string name="confirm_purchase_button">Confirmar Compra</string>
+    <string name="confirm_purchase_button">CONFIRMAR COMPRA</string>
     <string name="order_summary_format">%d. %s\n   Cantidad: %d x %s\n   Subtotal: %s\n\n</string>
     <string name="purchase_success_message">✅ ¡Compra realizada exitosamente!\nGracias por tu compra</string>
     <string name="empty_cart_error">El carrito está vacío</string>
@@ -56,7 +56,7 @@
     <string name="error_password_length">La contraseña debe tener mínimo 6 caracteres</string>
     <string name="error_login">Error de inicio de sesión</string>
     <string name="error_register">Error en registro</string>
-    <string name="error_load_product">Error al cargar el producto</string>
+    <string name="error_load_product">Error al carrar el producto</string>
     <string name="error_no_data">No hay datos disponibles</string>
     <string name="error_save_name">Error al guardar nombre</string>
     <string name="default_product_title">Product Title</string>
@@ -71,4 +71,7 @@
     <string name="out_of_stock">Sin stock</string>
     <string name="insufficient_stock">Stock insuficiente</string>
     <string name="purchase_processing">Procesando compra…</string>
+    <!-- Nuevos strings para valoraciones -->
+    <string name="rating_label">Valoración:</string>
+    <string name="rating_stars">★★★★★</string>
 </resources>

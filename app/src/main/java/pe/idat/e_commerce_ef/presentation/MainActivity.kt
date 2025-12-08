@@ -41,9 +41,8 @@ class MainActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         user?.let {
             binding.tvUserEmail.text = it.email ?: getString(R.string.default_email)
-            val displayName = it.displayName ?: getString(R.string.default_user)
-            val firstName = displayName.split(" ").first()
-            binding.tvWelcome.text = getString(R.string.user_greeting, firstName)
+            val displayName = it.displayName ?: it.email?.split("@")?.first() ?: getString(R.string.default_user)
+            binding.tvWelcome.text = getString(R.string.user_greeting, displayName)
         }
     }
 

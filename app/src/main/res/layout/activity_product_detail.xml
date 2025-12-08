@@ -100,33 +100,117 @@
                 android:gravity="center"
                 android:layout_marginBottom="16dp" />
 
+            <!-- Sección de categoría, stock y valoración -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="24dp">
+                android:orientation="vertical"
+                android:layout_marginBottom="24dp"
+                android:paddingHorizontal="16dp">
 
-                <TextView
-                    android:id="@+id/tvProductCategory"
-                    android:layout_width="wrap_content"
+                <!-- Fila 1: Categoría y Stock -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/default_category"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/darker_gray"
-                    android:background="@drawable/badge_background"
-                    android:padding="8dp"
-                    android:layout_marginEnd="8dp" />
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
 
-                <TextView
-                    android:id="@+id/tvProductStock"
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tvProductCategory"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/default_category"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/darker_gray"
+                        android:background="@drawable/badge_background"
+                        android:padding="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvProductStock"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/stock_label"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/darker_gray"
+                        android:background="@drawable/badge_background"
+                        android:padding="8dp"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+
+                <!-- Fila 2: Valoración con estrellas -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/stock_label"
-                    android:textSize="14sp"
-                    android:textColor="@android:color/darker_gray"
-                    android:background="@drawable/badge_background"
-                    android:padding="8dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rating_label"
+                        android:textSize="14sp"
+                        android:textColor="@android:color/darker_gray"
+                        android:layout_marginEnd="8dp" />
+
+                    <!-- Contenedor para las estrellas -->
+                    <LinearLayout
+                        android:id="@+id/llStars"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <!-- Estrella 1 -->
+                        <TextView
+                            android:id="@+id/star1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="★"
+                            android:textSize="24sp"
+                            android:textColor="#FFD700"
+                            android:layout_marginEnd="2dp" />
+
+                        <!-- Estrella 2 -->
+                        <TextView
+                            android:id="@+id/star2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="★"
+                            android:textSize="24sp"
+                            android:textColor="#FFD700"
+                            android:layout_marginEnd="2dp" />
+
+                        <!-- Estrella 3 -->
+                        <TextView
+                            android:id="@+id/star3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="★"
+                            android:textSize="24sp"
+                            android:textColor="#FFD700"
+                            android:layout_marginEnd="2dp" />
+
+                        <!-- Estrella 4 -->
+                        <TextView
+                            android:id="@+id/star4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="★"
+                            android:textSize="24sp"
+                            android:textColor="#FFD700"
+                            android:layout_marginEnd="2dp" />
+
+                        <!-- Estrella 5 -->
+                        <TextView
+                            android:id="@+id/star5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="★"
+                            android:textSize="24sp"
+                            android:textColor="#FFD700" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <View
