@@ -9,16 +9,25 @@ object CartManager {
     val total: Double get() = cart.sumOf { it.price * it.quantity }
     val itemCount: Int get() = cart.sumOf { it.quantity }
 
-    fun addToCart(product: Product, quantity: Int = 1) {
+    fun addToCart(product: Product, quantity: Int = 1): Boolean {
         val existing = cart.find { it.id == product.id }
+
         if (existing != null) {
-            existing.setQuantity(existing.quantity + quantity)
-        } else {
-            val newItem = product.copy().apply {
-                setQuantity(quantity)
+            val newTotalQty = existing.quantity + quantity
+            if (newTotalQty <= product.stock) {
+                existing.setQuantity(newTotalQty)
+                return true
             }
-            cart.add(newItem)
+        } else {
+            if (product.stock >= quantity) {
+                val newItem = product.copy().apply {
+                    setQuantity(quantity)
+                }
+                cart.add(newItem)
+                return true
+            }
         }
+        return false
     }
 
     fun removeFromCart(product: Product) {
@@ -29,7 +38,27 @@ object CartManager {
         cart.clear()
     }
 
-    // Nuevo metodo para forzar reset del carrito
+    fun processPurchase(): Boolean {
+        for (item in cart) {
+            val originalProduct = getOriginalProduct(item.id)
+            if (originalProduct == null || originalProduct.stock < item.quantity) {
+                return false
+            }
+        }
+
+        for (item in cart) {
+            getOriginalProduct(item.id)?.let { original ->
+                original.stock -= item.quantity
+            }
+        }
+
+        return true
+    }
+
+    private fun getOriginalProduct(id: Int): Product? {
+        return null
+    }
+
     fun forceReset() {
         cart.clear()
     }

@@ -1,80 +1,57 @@
 package pe.idat.e_commerce_ef.presentation.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import pe.idat.e_commerce_ef.R
 import pe.idat.e_commerce_ef.databinding.ItemProductBinding
 import pe.idat.e_commerce_ef.domain.model.Product
-import pe.idat.e_commerce_ef.presentation.ProductDetailActivity
 
 class ProductAdapter(
-    private val onAddToCart: (Product, Int) -> Unit
-) : ListAdapter<Product, ProductAdapter.ViewHolder>(ProductDiffCallback()) {
+    private val onItemClick: (Product) -> Unit,
+    private val onAddToCart: (Product) -> Unit
+) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
-    class ViewHolder(
-        private val binding: ItemProductBinding,
-        private val onAddToCart: (Product, Int) -> Unit
+    inner class ProductViewHolder(
+        private val binding: ItemProductBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
-            binding.tvName.text = product.name
-            binding.tvPrice.text = "S/. ${String.format("%.2f", product.price)}"
-            binding.tvCategory.text = product.category
+            binding.tvProductTitle.text = product.name
+            binding.tvProductPrice.text = binding.root.context.getString(
+                R.string.format_price,
+                product.price
+            )
+            binding.tvProductCategory.text = product.category
 
-            // Usar Coil para cargar imágenes
             binding.ivProduct.load(product.image) {
                 crossfade(true)
+                error(R.drawable.image_background)
             }
 
-            // Click en el botón para agregar al carrito (evita que abra el detalle)
-            binding.btnAddToCart.setOnClickListener {
-                it.isClickable = true
-                onAddToCart(product, 1)
-            }
-
-            // Click en la imagen para ver detalles
-            binding.ivProduct.setOnClickListener {
-                openProductDetail(product)
-            }
-
-            // Click en el contenedor completo (LinearLayout) para ver detalles
             binding.root.setOnClickListener {
-                openProductDetail(product)
+                onItemClick(product)
             }
 
-            // Click en el nombre para ver detalles
-            binding.tvName.setOnClickListener {
-                openProductDetail(product)
+            binding.btnAddToCart.setOnClickListener {
+                onAddToCart(product)
             }
-
-            // Click en el precio para ver detalles
-            binding.tvPrice.setOnClickListener {
-                openProductDetail(product)
-            }
-        }
-
-        private fun openProductDetail(product: Product) {
-            val context = itemView.context
-            val intent = Intent(context, ProductDetailActivity::class.java).apply {
-                putExtra("product", product)
-            }
-            context.startActivity(intent)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding = ItemProductBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return ViewHolder(binding, onAddToCart)
+        return ProductViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }

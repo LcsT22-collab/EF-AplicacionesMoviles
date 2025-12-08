@@ -1,4 +1,3 @@
-// ProductService.kt
 package pe.idat.e_commerce_ef.data.remote
 
 import pe.idat.e_commerce_ef.data.remote.dto.ProductsResponse
@@ -13,7 +12,6 @@ interface ProductService {
 
     companion object {
         private const val BASE_URL = "https://json-tienda.vercel.app/"
-
         fun create(): ProductService {
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -23,4 +21,3 @@ interface ProductService {
         }
     }
 }
-

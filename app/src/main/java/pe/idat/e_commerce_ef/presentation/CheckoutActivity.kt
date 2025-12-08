@@ -4,27 +4,54 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import pe.idat.e_commerce_ef.R
+import pe.idat.e_commerce_ef.data.AppRepository
 import pe.idat.e_commerce_ef.databinding.ActivityCheckoutBinding
+import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
+import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModelFactory
 import pe.idat.e_commerce_ef.util.CartManager
 
 class CheckoutActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCheckoutBinding
+    private lateinit var viewModel: AppViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCheckoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val repository = AppRepository(applicationContext)
+        val factory = AppViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
+
         setupToolbar()
         setupClickListeners()
         loadOrderSummary()
+        setupObservers()
     }
 
     private fun setupToolbar() {
         binding.btnBackCheckout.setOnClickListener {
             onBackPressed()
+        }
+    }
+
+    private fun setupObservers() {
+        viewModel.purchaseResult.observe(this) { result ->
+            if (result.first) {
+                Toast.makeText(this, result.second ?: "Compra realizada", Toast.LENGTH_LONG).show()
+
+                val intent = Intent(this, ProductListActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    putExtra("purchase_completed", true)
+                }
+                startActivity(intent)
+                finish()
+            } else {
+                Toast.makeText(this, result.second ?: "Error en la compra", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -40,19 +67,7 @@ class CheckoutActivity : AppCompatActivity() {
             return
         }
 
-        Toast.makeText(this, getString(R.string.purchase_success_message), Toast.LENGTH_LONG).show()
-
-        val purchasedItems = CartManager.items.toList()
-        CartManager.clearCart()
-
-        val intent = Intent(this, ProductListActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra("purchase_completed", true)
-            putExtra("items_count", purchasedItems.size)
-            putExtra("total_amount", CartManager.total)
-        }
-        startActivity(intent)
-        finish()
+        viewModel.processPurchase()
     }
 
     private fun loadOrderSummary() {

@@ -9,7 +9,7 @@ data class Product(
     val description: String,
     val category: String,
     val image: String,
-    val stock: Int
+    var stock: Int
 ) : Serializable {
     var quantity: Int = 1
         private set
@@ -19,4 +19,17 @@ data class Product(
     }
 
     fun totalPrice(): Double = price * quantity
+
+    fun reduceStock(): Boolean {
+        return if (quantity <= stock) {
+            stock -= quantity
+            true
+        } else {
+            false
+        }
+    }
+
+    fun canAddToCart(requestedQty: Int = 1): Boolean {
+        return stock >= requestedQty
+    }
 }

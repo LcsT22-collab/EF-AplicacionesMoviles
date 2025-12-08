@@ -38,6 +38,7 @@
     <string name="format_price">S/. %.2f</string>
     <string name="format_quantity">(x%d)</string>
     <string name="category_format">%s | Cantidad: %d</string>
+    <string name="format_price_with_quantity">S/. %.2f (x%d)</string>
 
     <string name="checkout_title">Finalizar Compra</string>
     <string name="order_summary_title">Resumen de tu Compra</string>
@@ -75,10 +76,15 @@
     <string name="loading_products">Cargando productos...</string>
     <string name="default_user">Usuario</string>
 
-
     <string name="back">Volver</string>
     <string name="register_success">Registro exitoso</string>
-    <string name="format_price_with_quantity">S/. %.2f (x%d)</string>
-
+    <string name="no_products_available">No hay productos disponibles</string>
+    <string name="out_of_stock">Sin stock</string>
+    <string name="insufficient_stock">Stock insuficiente</string>
+    <string name="purchase_processing">Procesando compra…</string>
+    <string name="error_redeclaration">Error de redeclaración: %s ya está definido</string>
+    <string name="error_duplicate_class">Clase duplicada encontrada. Verifique sus archivos.</string>
+    <string name="error_compile">Error de compilación: %s</string>
+    <string name="suggestion_check_files">Verifique si tiene clases duplicadas en diferentes archivos</string>
 
 </resources>

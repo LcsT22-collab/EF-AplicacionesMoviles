@@ -23,6 +23,9 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
     private val _cartItems = MutableLiveData<List<Product>>()
     val cartItems: LiveData<List<Product>> = _cartItems
 
+    private val _purchaseResult = MutableLiveData<Pair<Boolean, String?>>()
+    val purchaseResult: LiveData<Pair<Boolean, String?>> = _purchaseResult
+
     init {
         loadProducts()
         updateCart()
@@ -33,20 +36,35 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
         _error.value = null
 
         viewModelScope.launch {
-            val result = repository.getProducts()
-            if (result.isSuccess) {
-                _products.value = result.getOrNull() ?: emptyList()
-            } else {
-                _error.value = result.exceptionOrNull()?.message
+            try {
+                val result = repository.getProducts()
+                if (result.isSuccess) {
+                    _products.value = result.getOrNull() ?: emptyList()
+                    println("✅ Productos cargados: ${_products.value?.size}")
+                } else {
+                    _error.value = result.exceptionOrNull()?.message ?: "Error desconocido"
+                    println("❌ Error al cargar productos: ${_error.value}")
+                }
+            } catch (e: Exception) {
+                _error.value = e.message ?: "Excepción al cargar productos"
+                println("❌ Excepción: ${e.message}")
+            } finally {
+                _loading.value = false
             }
-            _loading.value = false
         }
     }
 
-    // Funciones del carrito
-    fun addToCart(product: Product, quantity: Int = 1) {
-        CartManager.addToCart(product, quantity)
-        updateCart()
+    fun addToCart(product: Product, quantity: Int = 1): Boolean {
+        val currentProduct = _products.value?.find { it.id == product.id }
+
+        if (currentProduct != null && currentProduct.stock >= quantity) {
+            val success = CartManager.addToCart(product, quantity)
+            if (success) {
+                updateCart()
+                return true
+            }
+        }
+        return false
     }
 
     fun removeFromCart(product: Product) {
@@ -63,7 +81,53 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
         _cartItems.value = CartManager.items
     }
 
-    // Funciones de autenticación
+    fun processPurchase() {
+        viewModelScope.launch {
+            _loading.value = true
+
+            try {
+                val currentProducts = _products.value ?: emptyList()
+                val cartItems = CartManager.items
+
+                val productMap = currentProducts.associateBy { it.id }
+
+                for (cartItem in cartItems) {
+                    val product = productMap[cartItem.id]
+                    if (product == null || product.stock < cartItem.quantity) {
+                        _purchaseResult.value = Pair(false, "Stock insuficiente para ${cartItem.name}")
+                        _loading.value = false
+                        return@launch
+                    }
+                }
+
+                val updatedProducts = currentProducts.map { product ->
+                    val cartItem = cartItems.find { it.id == product.id }
+                    if (cartItem != null) {
+                        product.copy(stock = product.stock - cartItem.quantity)
+                    } else {
+                        product
+                    }
+                }
+
+                val updateResult = repository.updateProducts(updatedProducts)
+
+                if (updateResult.isSuccess) {
+                    _products.value = updatedProducts
+                    CartManager.clearCart()
+                    updateCart()
+                    _purchaseResult.value = Pair(true, "Compra realizada exitosamente")
+                } else {
+                    _purchaseResult.value = Pair(false, "Error al guardar los cambios")
+                }
+
+            } catch (e: Exception) {
+                _purchaseResult.value = Pair(false, "Error al procesar la compra: ${e.message}")
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+
     fun login(email: String, password: String, onResult: (Result<Boolean>) -> Unit) {
         viewModelScope.launch {
             val result = repository.login(email, password)
@@ -79,7 +143,6 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     fun logout() {
-        // Limpiar el carrito también al hacer logout
         CartManager.clearCart()
         repository.logout()
     }
