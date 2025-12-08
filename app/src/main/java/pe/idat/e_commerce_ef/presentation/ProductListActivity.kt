@@ -2,7 +2,6 @@ package pe.idat.e_commerce_ef.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -27,15 +26,14 @@ class ProductListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val repository = AppRepository(applicationContext)
-        val factory = AppViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
+        viewModel = ViewModelProvider(this, AppViewModelFactory(repository))[AppViewModel::class.java]
 
         setupAdapter()
         setupObservers()
         setupListeners()
 
         viewModel.loadProducts()
-        updateCartCounterFromViewModel()
+        updateCartCounter()
 
         checkPurchaseResult()
     }
@@ -43,25 +41,15 @@ class ProductListActivity : AppCompatActivity() {
     private fun setupAdapter() {
         productAdapter = ProductAdapter(
             onItemClick = { product ->
-                val intent = Intent(this, ProductDetailActivity::class.java).apply {
+                startActivity(Intent(this, ProductDetailActivity::class.java).apply {
                     putExtra("product", product)
-                }
-                startActivity(intent)
+                })
             },
             onAddToCart = { product ->
-                val success = viewModel.addToCart(product, 1)
-                if (success) {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.add_to_cart_success, product.name),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if (viewModel.addToCart(product, 1)) {
+                    Toast.makeText(this, getString(R.string.add_to_cart_success, product.name), Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(
-                        this,
-                        "No hay stock suficiente",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this, "No hay stock suficiente", Toast.LENGTH_SHORT).show()
                 }
             }
         )
@@ -72,32 +60,26 @@ class ProductListActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         viewModel.products.observe(this) { products ->
-            binding.progressBar.visibility = View.GONE
+            binding.progressBar.visibility = android.view.View.GONE
             productAdapter.submitList(products)
 
-            if (products.isEmpty()) {
-                binding.tvNoProducts.visibility = View.VISIBLE
-                binding.recyclerViewProducts.visibility = View.GONE
-            } else {
-                binding.tvNoProducts.visibility = View.GONE
-                binding.recyclerViewProducts.visibility = View.VISIBLE
-            }
+            val isEmpty = products.isEmpty()
+            binding.tvNoProducts.visibility = if (isEmpty) android.view.View.VISIBLE else android.view.View.GONE
+            binding.recyclerViewProducts.visibility = if (isEmpty) android.view.View.GONE else android.view.View.VISIBLE
         }
 
         viewModel.loading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
         }
 
-        viewModel.cartItems.observe(this) { items ->
-            updateCartCounter(items)
-        }
+        viewModel.cartItems.observe(this) { updateCartCounter() }
 
         viewModel.error.observe(this) { error ->
             error?.let {
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show()
-                binding.progressBar.visibility = View.GONE
-                binding.tvNoProducts.visibility = View.VISIBLE
-                binding.recyclerViewProducts.visibility = View.GONE
+                binding.progressBar.visibility = android.view.View.GONE
+                binding.tvNoProducts.visibility = android.view.View.VISIBLE
+                binding.recyclerViewProducts.visibility = android.view.View.GONE
             }
         }
 
@@ -119,32 +101,23 @@ class ProductListActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        binding.btnBack.setOnClickListener {
-            onBackPressed()
-        }
-
-        binding.btnCart.setOnClickListener {
-            startActivity(Intent(this, CartActivity::class.java))
-        }
+        binding.btnBack.setOnClickListener { onBackPressed() }
+        binding.btnCart.setOnClickListener { startActivity(Intent(this, CartActivity::class.java)) }
     }
 
-    private fun updateCartCounter(items: List<pe.idat.e_commerce_ef.domain.model.Product>) {
-        val totalQuantity = items.sumOf { it.quantity }
+    private fun updateCartCounter() {
+        val totalQuantity = CartManager.items.sumOf { it.quantity }
         if (totalQuantity > 0) {
             binding.tvCartCount.text = totalQuantity.toString()
-            binding.tvCartCount.visibility = View.VISIBLE
+            binding.tvCartCount.visibility = android.view.View.VISIBLE
         } else {
-            binding.tvCartCount.visibility = View.GONE
+            binding.tvCartCount.visibility = android.view.View.GONE
         }
-    }
-
-    private fun updateCartCounterFromViewModel() {
-        viewModel.updateCart()
     }
 
     override fun onResume() {
         super.onResume()
-        updateCartCounterFromViewModel()
+        updateCartCounter()
         viewModel.loadProducts()
     }
 

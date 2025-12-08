@@ -1,9 +1,9 @@
 package pe.idat.e_commerce_ef.data.local
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
 import pe.idat.e_commerce_ef.data.local.dao.ProductDao
 import pe.idat.e_commerce_ef.data.local.entity.LocalProduct
 

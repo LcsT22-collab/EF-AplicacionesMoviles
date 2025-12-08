@@ -12,7 +12,6 @@ import pe.idat.e_commerce_ef.databinding.ActivityProductDetailBinding
 import pe.idat.e_commerce_ef.domain.model.Product
 import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModel
 import pe.idat.e_commerce_ef.presentation.viewmodel.AppViewModelFactory
-import pe.idat.e_commerce_ef.util.CartManager
 
 class ProductDetailActivity : AppCompatActivity() {
 
@@ -26,8 +25,7 @@ class ProductDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val repository = AppRepository(applicationContext)
-        val factory = AppViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
+        viewModel = ViewModelProvider(this, AppViewModelFactory(repository))[AppViewModel::class.java]
 
         setupListeners()
         loadProductDetails()
@@ -37,8 +35,7 @@ class ProductDetailActivity : AppCompatActivity() {
     private fun setupObservers() {
         viewModel.products.observe(this) { products ->
             currentProduct?.let { oldProduct ->
-                val updatedProduct = products.find { it.id == oldProduct.id }
-                updatedProduct?.let {
+                products.find { it.id == oldProduct.id }?.let {
                     currentProduct = it
                     updateStockDisplay(it.stock)
                 }
@@ -47,15 +44,8 @@ class ProductDetailActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        binding.btnBackDetail.setOnClickListener {
-            onBackPressed()
-        }
-
-        binding.btnAddToCartDetail.setOnClickListener {
-            currentProduct?.let { product ->
-                addToCart(product)
-            }
-        }
+        binding.btnBackDetail.setOnClickListener { onBackPressed() }
+        binding.btnAddToCartDetail.setOnClickListener { currentProduct?.let { addToCart(it) } }
     }
 
     private fun loadProductDetails() {
@@ -68,10 +58,7 @@ class ProductDetailActivity : AppCompatActivity() {
             binding.tvProductDescription.text = product.description
 
             updateStockDisplay(product.stock)
-
-            binding.ivProductDetail.load(product.image) {
-                crossfade(true)
-            }
+            binding.ivProductDetail.load(product.image) { crossfade(true) }
         } ?: run {
             Toast.makeText(this, getString(R.string.error_load_product), Toast.LENGTH_SHORT).show()
             finish()
@@ -92,26 +79,13 @@ class ProductDetailActivity : AppCompatActivity() {
 
     private fun addToCart(product: Product) {
         if (product.stock > 0) {
-            val success = viewModel.addToCart(product, 1)
-            if (success) {
-                Toast.makeText(
-                    this,
-                    getString(R.string.add_to_cart_success, product.name),
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (viewModel.addToCart(product, 1)) {
+                Toast.makeText(this, getString(R.string.add_to_cart_success, product.name), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(
-                    this,
-                    "No hay stock suficiente",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "No hay stock suficiente", Toast.LENGTH_SHORT).show()
             }
         } else {
-            Toast.makeText(
-                this,
-                "No hay stock disponible para ${product.name}",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "No hay stock disponible", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -122,9 +96,6 @@ class ProductDetailActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(
-            android.R.anim.slide_in_left,
-            android.R.anim.slide_out_right
-        )
+        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
     }
 }

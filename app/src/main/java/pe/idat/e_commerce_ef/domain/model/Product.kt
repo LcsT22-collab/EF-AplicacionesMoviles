@@ -19,17 +19,4 @@ data class Product(
     }
 
     fun totalPrice(): Double = price * quantity
-
-    fun reduceStock(): Boolean {
-        return if (quantity <= stock) {
-            stock -= quantity
-            true
-        } else {
-            false
-        }
-    }
-
-    fun canAddToCart(requestedQty: Int = 1): Boolean {
-        return stock >= requestedQty
-    }
 }

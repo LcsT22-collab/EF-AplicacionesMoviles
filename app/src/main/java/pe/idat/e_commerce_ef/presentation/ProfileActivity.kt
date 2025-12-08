@@ -9,23 +9,19 @@ import pe.idat.e_commerce_ef.databinding.ActivityProfileBinding
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
-    private lateinit var auth: FirebaseAuth
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        auth = FirebaseAuth.getInstance()
-
         setupViews()
         loadUserData()
     }
 
     private fun setupViews() {
-        binding.btnBackProfile.setOnClickListener {
-            onBackPressed()
-        }
+        binding.btnBackProfile.setOnClickListener { onBackPressed() }
     }
 
     private fun loadUserData() {

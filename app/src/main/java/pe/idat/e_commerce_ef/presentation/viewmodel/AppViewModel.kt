@@ -40,14 +40,11 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
                 val result = repository.getProducts()
                 if (result.isSuccess) {
                     _products.value = result.getOrNull() ?: emptyList()
-                    println("✅ Productos cargados: ${_products.value?.size}")
                 } else {
-                    _error.value = result.exceptionOrNull()?.message ?: "Error desconocido"
-                    println("❌ Error al cargar productos: ${_error.value}")
+                    _error.value = result.exceptionOrNull()?.message ?: "Error"
                 }
             } catch (e: Exception) {
-                _error.value = e.message ?: "Excepción al cargar productos"
-                println("❌ Excepción: ${e.message}")
+                _error.value = e.message ?: "Excepción"
             } finally {
                 _loading.value = false
             }
@@ -72,11 +69,6 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
         updateCart()
     }
 
-    fun clearCart() {
-        CartManager.clearCart()
-        updateCart()
-    }
-
     fun updateCart() {
         _cartItems.value = CartManager.items
     }
@@ -89,10 +81,8 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
                 val currentProducts = _products.value ?: emptyList()
                 val cartItems = CartManager.items
 
-                val productMap = currentProducts.associateBy { it.id }
-
                 for (cartItem in cartItems) {
-                    val product = productMap[cartItem.id]
+                    val product = currentProducts.find { it.id == cartItem.id }
                     if (product == null || product.stock < cartItem.quantity) {
                         _purchaseResult.value = Pair(false, "Stock insuficiente para ${cartItem.name}")
                         _loading.value = false
@@ -117,11 +107,11 @@ class AppViewModel(private val repository: AppRepository) : ViewModel() {
                     updateCart()
                     _purchaseResult.value = Pair(true, "Compra realizada exitosamente")
                 } else {
-                    _purchaseResult.value = Pair(false, "Error al guardar los cambios")
+                    _purchaseResult.value = Pair(false, "Error al guardar cambios")
                 }
 
             } catch (e: Exception) {
-                _purchaseResult.value = Pair(false, "Error al procesar la compra: ${e.message}")
+                _purchaseResult.value = Pair(false, "Error: ${e.message}")
             } finally {
                 _loading.value = false
             }

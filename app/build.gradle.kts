@@ -67,7 +67,6 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
-    implementation(libs.okhttp.logging)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines)
@@ -75,8 +74,5 @@ dependencies {
     // Coil
     implementation(libs.coil)
 
-    // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+
 }

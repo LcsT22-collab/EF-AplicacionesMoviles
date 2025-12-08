@@ -23,8 +23,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val repository = AppRepository(applicationContext)
-        val factory = AppViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
+        viewModel = ViewModelProvider(this, AppViewModelFactory(repository))[AppViewModel::class.java]
 
         setupListeners()
     }

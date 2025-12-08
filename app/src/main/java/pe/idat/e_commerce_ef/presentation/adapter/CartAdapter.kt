@@ -18,12 +18,12 @@ class CartAdapter(
 
         fun bind(product: Product) {
             binding.tvCartTitle.text = product.name
-            binding.tvCartPrice.text = getString(
+            binding.tvCartPrice.text = itemView.context.getString(
                 R.string.format_price_with_quantity,
                 product.totalPrice(),
                 product.quantity
             )
-            binding.tvCartCategory.text = getString(
+            binding.tvCartCategory.text = itemView.context.getString(
                 R.string.category_format,
                 product.category,
                 product.quantity
@@ -34,10 +34,6 @@ class CartAdapter(
             binding.btnRemoveFromCart.setOnClickListener {
                 onRemoveFromCart(product)
             }
-        }
-
-        private fun getString(resId: Int, vararg args: Any): String {
-            return binding.root.context.getString(resId, *args)
         }
     }
 

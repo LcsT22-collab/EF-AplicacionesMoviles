@@ -21,10 +21,7 @@ class ProductAdapter(
 
         fun bind(product: Product) {
             binding.tvProductTitle.text = product.name
-            binding.tvProductPrice.text = binding.root.context.getString(
-                R.string.format_price,
-                product.price
-            )
+            binding.tvProductPrice.text = itemView.context.getString(R.string.format_price, product.price)
             binding.tvProductCategory.text = product.category
 
             binding.ivProduct.load(product.image) {
@@ -32,13 +29,8 @@ class ProductAdapter(
                 error(R.drawable.image_background)
             }
 
-            binding.root.setOnClickListener {
-                onItemClick(product)
-            }
-
-            binding.btnAddToCart.setOnClickListener {
-                onAddToCart(product)
-            }
+            binding.root.setOnClickListener { onItemClick(product) }
+            binding.btnAddToCart.setOnClickListener { onAddToCart(product) }
         }
     }
 

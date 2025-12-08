@@ -2,7 +2,6 @@ package pe.idat.e_commerce_ef.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -27,8 +26,7 @@ class CartActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val repository = AppRepository(applicationContext)
-        val factory = AppViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory)[AppViewModel::class.java]
+        viewModel = ViewModelProvider(this, AppViewModelFactory(repository))[AppViewModel::class.java]
 
         setupViews()
         setupObservers()
@@ -37,11 +35,7 @@ class CartActivity : AppCompatActivity() {
     private fun setupViews() {
         cartAdapter = CartAdapter(emptyList()) { product ->
             viewModel.removeFromCart(product)
-            Toast.makeText(
-                this,
-                getString(R.string.remove_from_cart_success, product.name),
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, getString(R.string.remove_from_cart_success, product.name), Toast.LENGTH_SHORT).show()
         }
 
         binding.recyclerViewCart.apply {
@@ -49,43 +43,25 @@ class CartActivity : AppCompatActivity() {
             adapter = cartAdapter
         }
 
-        binding.btnBackCart.setOnClickListener {
-            onBackPressed()
-        }
-
-        binding.btnCheckout.setOnClickListener {
-            checkout()
-        }
+        binding.btnBackCart.setOnClickListener { onBackPressed() }
+        binding.btnCheckout.setOnClickListener { checkout() }
     }
 
     private fun setupObservers() {
         viewModel.cartItems.observe(this) { items ->
             cartAdapter.updateCartItems(items)
-            updateTotal(CartManager.total)
-            updateEmptyState(items.isEmpty())
-        }
-    }
+            binding.tvTotal.text = getString(R.string.format_price, CartManager.total)
 
-    private fun updateTotal(total: Double) {
-        binding.tvTotal.text = getString(R.string.format_price, total)
-    }
-
-    private fun updateEmptyState(isEmpty: Boolean) {
-        if (isEmpty) {
-            binding.tvEmptyCart.visibility = View.VISIBLE
-            binding.recyclerViewCart.visibility = View.GONE
-            binding.btnCheckout.visibility = View.GONE
-        } else {
-            binding.tvEmptyCart.visibility = View.GONE
-            binding.recyclerViewCart.visibility = View.VISIBLE
-            binding.btnCheckout.visibility = View.VISIBLE
+            val isEmpty = items.isEmpty()
+            binding.tvEmptyCart.visibility = if (isEmpty) android.view.View.VISIBLE else android.view.View.GONE
+            binding.recyclerViewCart.visibility = if (isEmpty) android.view.View.GONE else android.view.View.VISIBLE
+            binding.btnCheckout.visibility = if (isEmpty) android.view.View.GONE else android.view.View.VISIBLE
         }
     }
 
     private fun checkout() {
         if (CartManager.items.isNotEmpty()) {
-            val intent = Intent(this, CheckoutActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, CheckoutActivity::class.java))
         } else {
             Toast.makeText(this, getString(R.string.empty_cart_error), Toast.LENGTH_SHORT).show()
         }

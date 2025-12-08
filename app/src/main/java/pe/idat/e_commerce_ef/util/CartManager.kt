@@ -20,9 +20,7 @@ object CartManager {
             }
         } else {
             if (product.stock >= quantity) {
-                val newItem = product.copy().apply {
-                    setQuantity(quantity)
-                }
+                val newItem = product.copy().apply { setQuantity(quantity) }
                 cart.add(newItem)
                 return true
             }
@@ -35,31 +33,6 @@ object CartManager {
     }
 
     fun clearCart() {
-        cart.clear()
-    }
-
-    fun processPurchase(): Boolean {
-        for (item in cart) {
-            val originalProduct = getOriginalProduct(item.id)
-            if (originalProduct == null || originalProduct.stock < item.quantity) {
-                return false
-            }
-        }
-
-        for (item in cart) {
-            getOriginalProduct(item.id)?.let { original ->
-                original.stock -= item.quantity
-            }
-        }
-
-        return true
-    }
-
-    private fun getOriginalProduct(id: Int): Product? {
-        return null
-    }
-
-    fun forceReset() {
         cart.clear()
     }
 }
